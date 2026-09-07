@@ -10,8 +10,8 @@ Lê Hoàng Quân
 
 ## Lớp
 
-[Điền tên lớp của bạn]
+2611COMP101904
 
 ## Nhóm
 
-[Điền mã nhóm của bạn]
+4
