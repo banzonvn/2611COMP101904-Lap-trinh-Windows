@@ -149,10 +149,3 @@ Nhấn nút **Thoát**, một hộp thoại xác nhận xuất hiện giúp trá
 _Mô tả: Hộp thoại xác nhận với hai nút lựa chọn Yes / No._
 
 ---
-
-## 6. Hướng dẫn cài đặt và chạy chương trình
-
-1. **Clone repository:**
-   ```bash
-   git clone <URL_REPOSITORY_CUA_BAN>
-   ```
