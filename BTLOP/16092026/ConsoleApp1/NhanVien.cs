@@ -31,11 +31,33 @@ namespace QuanLyNhanVien
             }
         }
 
+        public NhanVien() { }
+
         public NhanVien(string maNV, string hoTen, double luongCoBan)
         {
             MaNV = maNV;
             HoTen = hoTen;
             LuongCoBan = luongCoBan;
+        }
+
+        public virtual void NhapThongTin()
+        {
+            Console.Write("Nhập mã nhân viên: ");
+            MaNV = Console.ReadLine()?.Trim() ?? "";
+
+            Console.Write("Nhập họ và tên: ");
+            HoTen = Console.ReadLine()?.Trim() ?? "";
+
+            while (true)
+            {
+                Console.Write("Nhập lương cơ bản (> 0): ");
+                if (double.TryParse(Console.ReadLine(), out double lcb) && lcb > 0)
+                {
+                    LuongCoBan = lcb;
+                    break;
+                }
+                Console.WriteLine("Lương cơ bản không hợp lệ! Vui lòng nhập lại.");
+            }
         }
 
         public virtual double TinhLuong()

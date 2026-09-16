@@ -11,7 +11,7 @@ namespace QuanLyNhanVien
             Console.OutputEncoding = Encoding.UTF8;
             List<NhanVien> danhSach = new List<NhanVien>();
 
-            // Khởi tạo danh sách mẫu gồm 5 nhân viên thuộc các loại
+            // Khởi tạo sẵn dữ liệu mẫu ban đầu
             danhSach.Add(new NhanVienVanPhong("VP01", "Trần Văn A", 6000000, 22));
             danhSach.Add(new NhanVienVanPhong("VP02", "Lê Thị B", 5500000, 26));
             danhSach.Add(new NhanVienKinhDoanh("KD01", "Nguyễn Văn C", 5000000, 150000000));
@@ -22,12 +22,13 @@ namespace QuanLyNhanVien
             do
             {
                 Console.WriteLine("\n========== MENU ==========");
-                Console.WriteLine("1. Xuất danh sách nhân viên");
-                Console.WriteLine("2. Tìm nhân viên theo mã");
-                Console.WriteLine("3. Tìm nhân viên có lương cao nhất");
-                Console.WriteLine("4. Tính tổng lương công ty phải trả");
+                Console.WriteLine("1. Nhập thêm nhân viên từ bàn phím");
+                Console.WriteLine("2. Xuất danh sách nhân viên");
+                Console.WriteLine("3. Tìm nhân viên theo mã");
+                Console.WriteLine("4. Tìm nhân viên có lương cao nhất");
+                Console.WriteLine("5. Tính tổng lương công ty phải trả");
                 Console.WriteLine("0. Thoát");
-                Console.Write("Chọn chức năng (0-4): ");
+                Console.Write("Chọn chức năng (0-5): ");
 
                 if (!int.TryParse(Console.ReadLine(), out luaChon))
                 {
@@ -38,15 +39,18 @@ namespace QuanLyNhanVien
                 switch (luaChon)
                 {
                     case 1:
-                        XuatDanhSach(danhSach);
+                        NhapThemNhanVien(danhSach);
                         break;
                     case 2:
-                        TimTheoMa(danhSach);
+                        XuatDanhSach(danhSach);
                         break;
                     case 3:
-                        TimLuongCaoNhat(danhSach);
+                        TimTheoMa(danhSach);
                         break;
                     case 4:
+                        TimLuongCaoNhat(danhSach);
+                        break;
+                    case 5:
                         TinhTongLuong(danhSach);
                         break;
                     case 0:
@@ -58,6 +62,32 @@ namespace QuanLyNhanVien
                 }
 
             } while (luaChon != 0);
+        }
+
+        static void NhapThemNhanVien(List<NhanVien> danhSach)
+        {
+            Console.WriteLine("\n--- CHỌN LOẠI NHÂN VIÊN CẦN NHẬP ---");
+            Console.WriteLine("1. Nhân viên văn phòng");
+            Console.WriteLine("2. Nhân viên kinh doanh");
+            Console.WriteLine("3. Nhân viên thời vụ");
+            Console.Write("Chọn (1-3): ");
+
+            if (!int.TryParse(Console.ReadLine(), out int loai) || loai < 1 || loai > 3)
+            {
+                Console.WriteLine("Loại nhân viên không hợp lệ!");
+                return;
+            }
+
+            NhanVien nv = null;
+            if (loai == 1) nv = new NhanVienVanPhong();
+            else if (loai == 2) nv = new NhanVienKinhDoanh();
+            else if (loai == 3) nv = new NhanVienThoiVu();
+
+            // Tính đa hình: gọi NhapThongTin() tương ứng với từng đối tượng
+            nv.NhapThongTin();
+            danhSach.Add(nv);
+
+            Console.WriteLine("=> Thêm nhân viên thành công!");
         }
 
         static void XuatDanhSach(List<NhanVien> danhSach)

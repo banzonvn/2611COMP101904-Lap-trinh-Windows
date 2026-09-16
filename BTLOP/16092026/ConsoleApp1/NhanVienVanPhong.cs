@@ -17,10 +17,27 @@ namespace QuanLyNhanVien
             }
         }
 
+        public NhanVienVanPhong() : base() { }
+
         public NhanVienVanPhong(string maNV, string hoTen, double luongCoBan, int soNgayLamViec)
             : base(maNV, hoTen, luongCoBan)
         {
             SoNgayLamViec = soNgayLamViec;
+        }
+
+        public override void NhapThongTin()
+        {
+            base.NhapThongTin();
+            while (true)
+            {
+                Console.Write("Nhập số ngày làm việc (0 - 31): ");
+                if (int.TryParse(Console.ReadLine(), out int ngay) && ngay >= 0 && ngay <= 31)
+                {
+                    SoNgayLamViec = ngay;
+                    break;
+                }
+                Console.WriteLine("Số ngày làm việc phải từ 0 đến 31! Vui lòng nhập lại.");
+            }
         }
 
         public override double TinhLuong()

@@ -1,6 +1,6 @@
 # COMP1019 - LẬP TRÌNH TRÊN WINDOWS
 
-## BÀI TẬP: QUẢN LÝ VÀ TÍNH LƯƠNG NHÂN VIÊN (OOP C# CONSOLE)
+## BÀI TẬP LỚN / BÀI TẬP LỚP: QUẢN LÝ VÀ TÍNH LƯƠNG NHÂN VIÊN (OOP C# CONSOLE)
 
 - **Sinh viên thực hiện:** Lê Hoàng Quân
 - **Mã số sinh viên:** 51.01.104.082
@@ -9,138 +9,145 @@
 
 ---
 
-## 1. Mục tiêu bài thực hành
+## 1. Mục tiêu bài tập
 
-- Vận dụng các đặc trưng cốt lõi của **Lập trình hướng đối tượng (OOP)** trong C#:
-  - **Đóng gói (Encapsulation):** Bảo vệ dữ liệu thông qua các thuộc tính (Properties).
-  - **Kế thừa (Inheritance):** Xây dựng lớp cơ sở trừu tượng `NhanVien` và các lớp dẫn xuất cho từng loại nhân viên.
-  - **Đa hình (Polymorphism):** Override phương thức tính lương `TinhLuong()` và xuất thông tin `XuatThongTin()` linh hoạt theo từng loại hình nhân viên.
-  - **Trừu tượng (Abstraction):** Thiết kế `abstract class` định nghĩa khung mẫu nghiệp vụ chung.
-- Quản lý tập hợp đối tượng đa hình bằng danh sách động `List<NhanVien>`.
-- Định dạng xuất dữ liệu dạng bảng biểu chuyên nghiệp trên Console.
-- Kiểm tra tính hợp lệ của dữ liệu đầu vào và xử lý ngoại lệ chống dừng chương trình đột ngột.
+- Vận dụng đầy đủ 4 tính chất của **Lập trình hướng đối tượng (OOP)** trong C#:
+  - **Đóng gói (Encapsulation):** Đóng gói thuộc tính bằng các Property (`get; set;`), kiểm tra tính hợp lệ dữ liệu.
+  - **Kế thừa (Inheritance):** Xây dựng lớp cơ sở `NhanVien` và cho các lớp con (`NhanVienVanPhong`, `NhanVienKinhDoanh`, `NhanVienThoiVu`) kế thừa.
+  - **Đa hình (Polymorphism):** Override linh hoạt các phương thức `NhapThongTin()`, `TinhLuong()`, `XuatHangBang()`.
+  - **Trừu tượng (Abstraction):** Sử dụng `abstract class` và `abstract method` để định hình khung nghiệp vụ chung.
+- Quản lý danh sách đối tượng đa hình bằng `List<NhanVien>`.
+- Cung cấp menu tương tác cho phép người dùng **nhập thêm nhân viên trực tiếp từ bàn phím**.
+- Định dạng bảng biểu hiển thị thông tin tiền tệ chuyên nghiệp trên giao diện Console.
 
 ---
 
-## 2. Kiến trúc các lớp (Class Design) & Công thức tính lương
+## 2. Kiến trúc các lớp (Class Design)
 
 ### 2.1. Lớp cơ sở trừu tượng: `NhanVien` (abstract)
 
-- **Thuộc tính:** `MaNV`, `HoTen`, `LuongCoBan`
-- **Phương thức trừu tượng:**
-  - `public abstract decimal TinhLuong();`
-  - `public abstract void XuatThongTin();`
+- **Thuộc tính chung:** `MaNV`, `HoTen`, `LuongCoBan`
+- **Phương thức chính:**
+  - `public virtual void NhapThongTin()`: Nhập mã, họ tên, lương cơ bản.
+  - `public abstract decimal TinhLuong()`: Phương thức tính lương đa hình.
+  - `public virtual void XuatHangBang()`: In thông tin nhân viên theo từng hàng của bảng.
 
-### 2.2. Các lớp con kế thừa
+### 2.2. Các lớp con dẫn xuất
 
 1. **`NhanVienVanPhong` (Nhân viên văn phòng):**
-   - Thuộc tính bổ sung: `SoNgayLamViec`
-   - Công thức tính lương:
-     $$\text{Thực lĩnh} = \text{Lương cơ bản} + (\text{Số ngày làm việc} \times 200.000\,\text{đ})$$
-
+   - Thuộc tính riêng: `SoNgayLamViec` (0 - 31 ngày).
+   - Công thức lương: $$\text{Thực lĩnh} = \text{Lương cơ bản} + (\text{Số ngày làm việc} \times 200.000\,\text{đ})$$
 2. **`NhanVienKinhDoanh` (Nhân viên kinh doanh):**
-   - Thuộc tính bổ sung: `DoanhSo`
-   - Công thức tính lương:
-     $$\text{Thực lĩnh} = \text{Lương cơ bản} + (\text{Doanh số} \times 5\%)$$
-
+   - Thuộc tính riêng: `DoanhSo`
+   - Công thức lương: $$\text{Thực lĩnh} = \text{Lương cơ bản} + (\text{Doanh số} \times 5\%)$$
 3. **`NhanVienThoiVu` (Nhân viên thời vụ):**
-   - Thuộc tính bổ sung: `SoGioLamViec`, `DonGiaGio` ($50.000\,\text{đ/giờ}$)
-   - Công thức tính lương:
-     $$\text{Thực lĩnh} = \text{Số giờ làm việc} \times 50.000\,\text{đ}$$
+   - Thuộc tính riêng: `SoGioLamViec`, `DonGiaGio` ($50.000\,\text{đ/h}$)
+   - Công thức lương: $$\text{Thực lĩnh} = \text{Số giờ làm việc} \times 50.000\,\text{đ}$$
 
 ---
 
 ## 3. Danh mục chức năng chương trình
 
-|              Chức năng              | Mô tả chi tiết                                                                                                                           |
-| :---------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------- |
-|   **1. Xuất danh sách nhân viên**   | Hiển thị toàn bộ nhân viên dưới dạng bảng có phân loại: Văn Phòng, Kinh Doanh, Thời Vụ, kèm Lương cơ bản và Thực lĩnh đã format tiền tệ. |
-|    **2. Tìm nhân viên theo mã**     | Cho phép nhập mã nhân viên (không phân biệt hoa/thường). Thông báo chi tiết nếu tìm thấy hoặc cảnh báo nếu không tồn tại.                |
-| **3. Tìm nhân viên lương cao nhất** | Quét danh sách và in ra thông tin nhân viên có mức thực lĩnh cao nhất công ty.                                                           |
-|     **4. Tính tổng quỹ lương**      | Cộng dồn thực lĩnh của toàn bộ nhân viên công ty phải chi trả trong tháng.                                                               |
-|            **0. Thoát**             | Đóng ứng dụng an toàn kèm thông báo kết thúc.                                                                                            |
+|                Chức năng                | Mô tả chi tiết                                                                                              |
+| :-------------------------------------: | :---------------------------------------------------------------------------------------------------------- |
+| **1. Nhập thêm nhân viên từ bàn phím**  | Cho phép lựa chọn loại nhân viên (Văn phòng, Kinh doanh, Thời vụ) và nhập các thông tin chi tiết tương ứng. |
+|     **2. Xuất danh sách nhân viên**     | Hiển thị toàn bộ nhân viên dưới dạng bảng có phân loại, chi tiết công việc, lương CB và thực lĩnh.          |
+|      **3. Tìm nhân viên theo mã**       | Tra cứu nhân viên theo mã (không phân biệt hoa/thường) và in kết quả tìm kiếm.                              |
+| **4. Tìm nhân viên có lương cao nhất**  | Quét danh sách và hiển thị nhân viên có thực lĩnh cao nhất.                                                 |
+| **5. Tính tổng lương công ty phải trả** | Tính tổng toàn bộ quỹ lương thực lĩnh công ty cần chi trả.                                                  |
+|              **0. Thoát**               | Dừng và thoát khỏi chương trình an toàn.                                                                    |
 
 ---
 
 ## 4. Kết quả thực nghiệm & Minh chứng chức năng
 
-> _Ghi chú: Toàn bộ ảnh chụp minh chứng được lưu trong thư mục `images/`._
+> _Ghi chú: Toàn bộ ảnh chụp minh chứng được lưu trong thư mục `images/` của bài BTLOP._
 
 ### 4.1. Menu chính của chương trình
 
-Menu hiển thị rõ ràng 4 chức năng nghiệp vụ và tùy chọn thoát (0).
+Giao diện Menu hiển thị danh mục các chức năng quản lý nhân viên.
 
 ![Menu chính](images/01_menu.png)
 
-_Mô tả: Giao diện Menu quản lý nhân viên._
+_Mô tả: Giao diện Menu của ứng dụng._
 
 ---
 
-### 4.2. Chức năng 1: Xuất danh sách nhân viên
+### 4.2. Chức năng Xuất danh sách nhân viên
 
-Xuất danh sách nhân viên định dạng bảng ngay ngắn, rõ ràng từng cột loại nhân viên, thông tin làm việc và thực lĩnh.
+Bảng danh sách tổng hợp đầy đủ các nhân viên của công ty được căn chỉnh ngay ngắn theo từng cột.
 
 ![Xuất danh sách nhân viên](images/02_xuat_danh_sach.png)
 
-_Mô tả: Bảng tổng hợp lương nhân viên đầy đủ các bộ phận._
+_Mô tả: Bảng hiển thị danh sách nhân viên các bộ phận._
 
 ---
 
-### 4.3. Chức năng 2: Tìm nhân viên theo mã
+### 4.3. Chức năng Tìm nhân viên theo mã
 
-- **Trường hợp 1: Tìm thấy nhân viên**
-  Nhập mã `VP02`, hệ thống tìm và hiển thị chính xác thông tin nhân viên Lê Thị B (Văn Phòng - 26 ngày công).
+- **Tìm thấy nhân viên:** Nhập mã `VP02`, hiển thị thông tin nhân viên Lê Thị B (Văn Phòng).
 
-  ![Tìm thấy nhân viên](images/03_tim_kiem_thanh_cong.png)
+  ![Tìm thấy](images/03_tim_kiem_thanh_cong.png)
 
-  _Mô tả: Tìm thấy nhân viên có mã VP02._
+- **Không tìm thấy nhân viên:** Nhập mã `1`, thông báo `Không tìm thấy nhân viên có mã: 1`.
 
-- **Trường hợp 2: Không tìm thấy nhân viên**
-  Nhập mã `1`, hệ thống đưa ra thông báo rõ ràng: `Không tìm thấy nhân viên có mã: 1`.
-
-  ![Không tìm thấy nhân viên](images/04_tim_kiem_that_bai.png)
-
-  _Mô tả: Thông báo khi mã nhân viên không tồn tại._
+  ![Không tìm thấy](images/04_tim_kiem_that_bai.png)
 
 ---
 
-### 4.4. Chức năng 3: Tìm nhân viên có lương cao nhất
+### 4.4. Chức năng Tìm nhân viên có lương cao nhất
 
-Tìm ra nhân viên có mức lương thực lĩnh cao nhất là Nguyễn Văn C (Kinh Doanh - KD01) với mức lương $12.500.000\,\text{đ}$.
+Tìm ra nhân viên có mức thực lĩnh cao nhất công ty (Nguyễn Văn C - KD01 với $12.500.000\,\text{đ}$).
 
 ![Lương cao nhất](images/05_luong_cao_nhat.png)
 
-_Mô tả: Nhân viên có thu nhập cao nhất công ty._
+_Mô tả: Thông tin nhân viên có mức thu nhập cao nhất._
 
 ---
 
-### 4.5. Chức năng 4: Tính tổng lương công ty phải trả
+### 4.5. Chức năng Tính tổng lương công ty phải trả
 
-Tính tổng lương thực lĩnh của toàn bộ 5 nhân viên:
-$$10.400.000 + 10.700.000 + 12.500.000 + 8.500.000 + 6.000.000 = 48.100.000\,\text{VNĐ}$$
+Tính tổng lương thực lĩnh của toàn bộ nhân viên công ty phải chi trả: $48.100.000\,\text{VNĐ}$.
 
 ![Tổng quỹ lương](images/06_tong_quy_luong.png)
 
-_Mô tả: Tổng quỹ lương công ty phải chi trả là 48.100.000 VNĐ._
+_Mô tả: Tổng quỹ lương công ty phải trả là 48.100.000 VNĐ._
 
 ---
 
 ### 4.6. Kiểm tra lỗi nhập liệu Menu
 
-Khi nhập số nằm ngoài phạm vi $0 - 4$ (ví dụ nhập `5`), chương trình xuất thông báo cảnh báo `Lựa chọn không hợp lệ!` và cho phép người dùng tiếp tục thao tác.
+Khi nhập chức năng không hợp lệ, chương trình xuất cảnh báo `Lựa chọn không hợp lệ!`.
 
-![Lỗi chọn Menu](images/07_loi_menu.png)
+![Lỗi Menu](images/07_loi_menu.png)
 
-_Mô tả: Bắt lỗi khi người dùng chọn chức năng không hợp lệ._
+_Mô tả: Xử lý ngoại lệ khi chọn chức năng sai._
 
 ---
 
-### 4.7. Chức năng 0: Thoát chương trình
+### 4.7. Thoát chương trình
 
-Kết thúc chương trình an toàn kèm thông báo xác nhận đã thoát.
+Đóng ứng dụng và hiển thị thông báo `Đã thoát chương trình.`.
 
 ![Thoát](images/08_thoat.png)
 
-_Mô tả: Thoát ứng dụng thành công._
+_Mô tả: Kết thúc ứng dụng an toàn._
+
+---
+
+### 4.8. Chức năng Nhập thêm nhân viên từ bàn phím
+
+Chương trình hỗ trợ chọn loại hình nhân viên và nhập đầy đủ thông tin:
+
+- Loại: `Nhân viên văn phòng`
+- Mã nhân viên: `P01`
+- Họ và tên: `Lê Hoàng Quân`
+- Lương cơ bản: `5.000.000 đ`
+- Số ngày làm việc: `30 ngày`
+- Kết quả: Thêm nhân viên thành công vào hệ thống.
+
+![Nhập thêm nhân viên](images/09_nhap_nhan_vien.png)
+
+_Mô tả: Giao diện Menu mới kèm quá trình nhập thêm nhân viên từ bàn phím._
 
 ---
