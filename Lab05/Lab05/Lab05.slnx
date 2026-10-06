@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Course.cs" />
+  </Folder>
+  <Project Path="Lab05.csproj" />
+</Solution>
