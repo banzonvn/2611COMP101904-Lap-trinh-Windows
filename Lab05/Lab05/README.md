@@ -14,18 +14,18 @@
 
 - Thiết kế giao diện ứng dụng Windows Forms trực quan bằng **Form Designer**, **Toolbox** và cửa sổ **Properties**.
 - Sử dụng thành thạo các control cơ bản: `Label`, `TextBox`, `Button`, `ComboBox`, `RadioButton`, `CheckBox`, `DateTimePicker`, `NumericUpDown`, `GroupBox`.
-- Tuân thủ quy ước đặt tên control chuẩn (`txt...`, `btn...`, `cbo...`, `rad...`, `dtp...`, `num...`, `chk...`, `lbl...`).
+- Tuân thủ quy ước đặt tên control chuẩn nghiệp vụ (`txt...`, `btn...`, `cbo...`, `rad...`, `dtp...`, `num...`, `chk...`, `lbl...`).
 - Xử lý đa dạng các sự kiện tương tác:
   - `Form_Load`: Khởi tạo danh sách khóa học và các giá trị mặc định ban đầu.
-  - `SelectedIndexChanged` và `ValueChanged`: Tự động tính toán và cập nhật tổng học phí khi người dùng đổi khóa học hoặc số tháng học.
+  - `SelectedIndexChanged` và `ValueChanged`: Tự động tính toán lại tổng học phí khi người dùng đổi khóa học hoặc tăng giảm số tháng học.
   - `Click`: Xử lý các nút bấm **Đăng ký**, **Làm mới** và **Thoát**.
-- Kiểm tra dữ liệu nhập (Validation) trước khi xử lý và xuất thông báo/kết quả qua `MessageBox`.
+- Kiểm tra dữ liệu nhập (Validation) trước khi xử lý và hiển thị kết quả/cảnh báo bằng `MessageBox`.
 
 ---
 
 ## 2. Thiết kế giao diện & Danh sách Controls
 
-Form chính có tiêu đề: **`ĐĂNG KÝ KHÓA HỌC`**, được phân nhóm rõ ràng qua 2 `GroupBox` và 1 vùng nút lệnh:
+Form chính có tiêu đề: **`ĐĂNG KÝ KHÓA HỌC`**, bố cục gồm 2 `GroupBox` phân nhóm thông tin và 1 vùng nút lệnh:
 
 | Nhóm                   |   Loại Control   | Tên Control (`Name`) | Chức năng / Mô tả                                     |
 | :--------------------- | :--------------: | :------------------- | :---------------------------------------------------- |
@@ -46,7 +46,7 @@ Form chính có tiêu đề: **`ĐĂNG KÝ KHÓA HỌC`**, được phân nhóm 
 
 ---
 
-## 3. Dữ liệu & Xử lý nghiệp vụ
+## 3. Dữ liệu khóa học & Xử lý nghiệp vụ
 
 ### 3.1. Bảng giá các khóa học
 
@@ -59,7 +59,7 @@ Form chính có tiêu đề: **`ĐĂNG KÝ KHÓA HỌC`**, được phân nhóm 
 
 - **Công thức tính học phí:**
   $$\text{Tổng học phí} = \text{Đơn giá khóa học (1 tháng)} \times \text{Số tháng}$$
-- **Tự động cập nhật:** Khi thay đổi mục chọn trong `cboKhoaHoc` hoặc tăng/giảm giá trị trong `numSoThang`, tổng học phí được tính lại ngay lập tức mà không cần bấm thêm nút nào.
+- **Tự động cập nhật:** Khi thay đổi mục chọn trong `cboKhoaHoc` hoặc tăng/giảm giá trị trong `numSoThang`, tổng học phí được tự động tính và cập nhật ngay lập tức.
 - **Kiểm tra hợp lệ khi Đăng ký:**
   - Họ tên không được để trống.
   - Số điện thoại không được để trống.
@@ -70,12 +70,13 @@ Form chính có tiêu đề: **`ĐĂNG KÝ KHÓA HỌC`**, được phân nhóm 
 
 ## 4. Kết quả thực nghiệm & Minh chứng chức năng
 
+> _Ghi chú: Toàn bộ ảnh chụp màn hình được đặt trong thư mục `images/` cùng cấp với file `README.md`._
 
 ### 4.1. Khởi tạo ứng dụng khi Form Load
 
 Khi khởi động, ComboBox được nạp sẵn 4 khóa học, mặc định chọn khóa đầu tiên (_C# WinForms cơ bản_), hình thức mặc định là _Online_, số tháng mặc định là _1_ và tổng học phí ban đầu hiển thị là **800.000 VND**.
 
-[images/01_khoi_tao_form.png]
+![Giao diện khởi tạo](images/01_khoi_tao_form.png)
 
 _Mô tả: Giao diện form khởi tạo chuẩn với các giá trị mặc định._
 
@@ -85,7 +86,7 @@ _Mô tả: Giao diện form khởi tạo chuẩn với các giá trị mặc đ�
 
 Hỗ trợ giao diện lịch trực quan để chọn chính xác ngày tháng năm sinh của học viên.
 
-[images/02_datetimepicker.png]
+![Chọn ngày sinh](images/02_datetimepicker.png)
 
 _Mô tả: Dropdown lịch hiển thị khi chọn ngày sinh._
 
@@ -95,7 +96,7 @@ _Mô tả: Dropdown lịch hiển thị khi chọn ngày sinh._
 
 ComboBox hiển thị đầy đủ danh sách 4 khóa học kèm đơn giá từng tháng.
 
-[images/03_combobox_khoahoc.png]
+![Danh sách khóa học](images/03_combobox_khoahoc.png)
 
 _Mô tả: Danh sách khóa học được nạp đầy đủ vào ComboBox._
 
@@ -106,7 +107,7 @@ _Mô tả: Danh sách khóa học được nạp đầy đủ vào ComboBox._
 Khi thay đổi hình thức sang _Offline (Trực tiếp)_ và tăng số tháng đăng ký lên **2 tháng**, nhãn tổng học phí tự động cập nhật:
 $$800.000 \times 2 = \mathbf{1.600.000\,\text{VND}}$$
 
-[images/04_tinh_hoc_phi_tu_dong.png]
+![Tính học phí tự động](images/04_tinh_hoc_phi_tu_dong.png)
 
 _Mô tả: Tổng học phí tự động nhân theo số tháng đăng ký._
 
@@ -116,7 +117,7 @@ _Mô tả: Tổng học phí tự động nhân theo số tháng đăng ký._
 
 Khi nhập đầy đủ dữ liệu và nhấn nút **Đăng ký**, một hộp thoại `MessageBox` xuất hiện tổng hợp toàn bộ thông tin đăng ký khóa học của học viên.
 
-[images/05_phieu_dang_ky_thanh_cong.png]
+![Phiếu đăng ký thành công](images/05_phieu_dang_ky_thanh_cong.png)
 
 _Mô tả: Hộp thoại xác nhận đăng ký thành công với đầy đủ các trường thông tin._
 
@@ -126,7 +127,7 @@ _Mô tả: Hộp thoại xác nhận đăng ký thành công với đầy đủ 
 
 Nếu bỏ trống ô số điện thoại và bấm Đăng ký, hệ thống kích hoạt hộp thoại cảnh báo: `Vui lòng nhập số điện thoại!`.
 
-[images/06_loi_trong_sdt.png]
+![Lỗi trống số điện thoại](images/06_loi_trong_sdt.png)
 
 _Mô tả: Cảnh báo khi người dùng không điền số điện thoại._
 
@@ -136,7 +137,7 @@ _Mô tả: Cảnh báo khi người dùng không điền số điện thoại._
 
 Nếu bỏ trống ô họ tên học viên, hệ thống phát hiện lỗi và cảnh báo: `Vui lòng nhập họ tên học viên!`.
 
-[images/07_loi_trong_ho_ten.png]
+![Lỗi trống họ tên](images/07_loi_trong_ho_ten.png)
 
 _Mô tả: Cảnh báo khi người dùng để trống họ tên._
 
@@ -146,14 +147,8 @@ _Mô tả: Cảnh báo khi người dùng để trống họ tên._
 
 Nhấn nút **Thoát**, một hộp thoại hỏi `Bạn có chắc chắn muốn thoát chương trình không?` hiển thị giúp tránh việc vô tình tắt ứng dụng.
 
-[images/08_xac_nhan_thoat.png]
+![Xác nhận thoát](images/08_xac_nhan_thoat.png)
 
 _Mô tả: Hộp thoại xác nhận trước khi đóng Form._
 
 ---
-
-## 5. Hướng dẫn biên dịch và chạy chương trình
-
-1. Mở file solution (`CourseRegistrationApp.sln` hoặc `.slnx`) bằng **Visual Studio**.
-2. Nhấn tổ hợp phím **Ctrl + Shift + B** để biên dịch project.
-3. Nhấn **F5** (hoặc nút **Start**) để khởi chạy ứng dụng Windows Forms.
