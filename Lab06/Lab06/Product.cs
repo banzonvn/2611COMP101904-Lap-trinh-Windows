@@ -13,7 +13,7 @@ namespace Lab06
         public bool ConKinhDoanh { get; set; } = true;
         public string DuongDanAnh { get; set; } = string.Empty;
 
-        // Cột tính toán mở rộng theo Slide 23 của bài giảng
+        // Cột tính toán mở rộng
         public decimal ThanhTien => DonGia * SoLuong;
 
         public Product() { }
@@ -30,7 +30,7 @@ namespace Lab06
             DuongDanAnh = photo;
         }
 
-        public void MirrorFrom(Product source)
+        public void ReplicateFrom(Product source)
         {
             TenSP = source.TenSP;
             LoaiSP = source.LoaiSP;

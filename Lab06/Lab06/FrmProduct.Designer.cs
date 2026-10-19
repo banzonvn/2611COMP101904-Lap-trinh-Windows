@@ -90,6 +90,7 @@
             this.mnuHelp});
             this.mnuMain.Location = new System.Drawing.Point(0, 0);
             this.mnuMain.Name = "mnuMain";
+            this.mnuMain.Padding = new System.Windows.Forms.Padding(6, 2, 0, 2);
             this.mnuMain.Size = new System.Drawing.Size(1004, 25);
             this.mnuMain.TabIndex = 0;
             // 
@@ -140,7 +141,7 @@
             this.mnuManageAdd.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.mnuManageAdd.Size = new System.Drawing.Size(161, 22);
             this.mnuManageAdd.Text = "&Thêm";
-            this.mnuManageAdd.Click += new System.EventHandler(this.ExecuteAddAction);
+            this.mnuManageAdd.Click += new System.EventHandler(this.TriggerAddLogic);
             // 
             // mnuManageEdit
             // 
@@ -148,7 +149,7 @@
             this.mnuManageEdit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
             this.mnuManageEdit.Size = new System.Drawing.Size(161, 22);
             this.mnuManageEdit.Text = "&Sửa";
-            this.mnuManageEdit.Click += new System.EventHandler(this.ExecuteEditAction);
+            this.mnuManageEdit.Click += new System.EventHandler(this.TriggerEditLogic);
             // 
             // mnuManageDelete
             // 
@@ -156,7 +157,7 @@
             this.mnuManageDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
             this.mnuManageDelete.Size = new System.Drawing.Size(161, 22);
             this.mnuManageDelete.Text = "&Xóa";
-            this.mnuManageDelete.Click += new System.EventHandler(this.ExecuteDeleteAction);
+            this.mnuManageDelete.Click += new System.EventHandler(this.TriggerDeleteLogic);
             // 
             // mnuHelp
             // 
@@ -188,8 +189,8 @@
             this.btnToolSearch});
             this.tlsActions.Location = new System.Drawing.Point(0, 25);
             this.tlsActions.Name = "tlsActions";
-            this.tlsActions.Padding = new System.Windows.Forms.Padding(10, 3, 1, 3);
-            this.tlsActions.Size = new System.Drawing.Size(1004, 31);
+            this.tlsActions.Padding = new System.Windows.Forms.Padding(12, 4, 12, 4);
+            this.tlsActions.Size = new System.Drawing.Size(1004, 33);
             this.tlsActions.TabIndex = 1;
             // 
             // btnToolAdd
@@ -199,7 +200,7 @@
             this.btnToolAdd.Name = "btnToolAdd";
             this.btnToolAdd.Size = new System.Drawing.Size(43, 22);
             this.btnToolAdd.Text = "Thêm";
-            this.btnToolAdd.Click += new System.EventHandler(this.ExecuteAddAction);
+            this.btnToolAdd.Click += new System.EventHandler(this.TriggerAddLogic);
             // 
             // btnToolEdit
             // 
@@ -208,7 +209,7 @@
             this.btnToolEdit.Name = "btnToolEdit";
             this.btnToolEdit.Size = new System.Drawing.Size(32, 22);
             this.btnToolEdit.Text = "Sửa";
-            this.btnToolEdit.Click += new System.EventHandler(this.ExecuteEditAction);
+            this.btnToolEdit.Click += new System.EventHandler(this.TriggerEditLogic);
             // 
             // btnToolDelete
             // 
@@ -217,7 +218,7 @@
             this.btnToolDelete.Name = "btnToolDelete";
             this.btnToolDelete.Size = new System.Drawing.Size(32, 22);
             this.btnToolDelete.Text = "Xóa";
-            this.btnToolDelete.Click += new System.EventHandler(this.ExecuteDeleteAction);
+            this.btnToolDelete.Click += new System.EventHandler(this.TriggerDeleteLogic);
             // 
             // btnToolRefresh
             // 
@@ -226,7 +227,7 @@
             this.btnToolRefresh.Name = "btnToolRefresh";
             this.btnToolRefresh.Size = new System.Drawing.Size(58, 22);
             this.btnToolRefresh.Text = "Làm mới";
-            this.btnToolRefresh.Click += new System.EventHandler(this.ExecuteRefreshAction);
+            this.btnToolRefresh.Click += new System.EventHandler(this.TriggerResetLogic);
             // 
             // toolStripSeparator1
             // 
@@ -238,8 +239,8 @@
             this.txtSearchKeyword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtSearchKeyword.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.txtSearchKeyword.Name = "txtSearchKeyword";
-            this.txtSearchKeyword.Size = new System.Drawing.Size(200, 25);
-            this.txtSearchKeyword.ToolTipText = "Nhập mã hoặc tên sản phẩm cần tìm...";
+            this.txtSearchKeyword.Size = new System.Drawing.Size(220, 25);
+            this.txtSearchKeyword.ToolTipText = "Nhập mã hoặc tên sản phẩm...";
             this.txtSearchKeyword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSearchKeyword_KeyDown);
             // 
             // btnToolSearch
@@ -249,7 +250,7 @@
             this.btnToolSearch.Name = "btnToolSearch";
             this.btnToolSearch.Size = new System.Drawing.Size(60, 22);
             this.btnToolSearch.Text = "Tìm kiếm";
-            this.btnToolSearch.Click += new System.EventHandler(this.ExecuteSearchAction);
+            this.btnToolSearch.Click += new System.EventHandler(this.TriggerSearchLogic);
             // 
             // stStrip
             // 
@@ -314,10 +315,10 @@
             this.grpProductInfo.Dock = System.Windows.Forms.DockStyle.Top;
             this.grpProductInfo.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
             this.grpProductInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
-            this.grpProductInfo.Location = new System.Drawing.Point(0, 56);
+            this.grpProductInfo.Location = new System.Drawing.Point(0, 58);
             this.grpProductInfo.Name = "grpProductInfo";
-            this.grpProductInfo.Padding = new System.Windows.Forms.Padding(12);
-            this.grpProductInfo.Size = new System.Drawing.Size(1004, 195);
+            this.grpProductInfo.Padding = new System.Windows.Forms.Padding(16);
+            this.grpProductInfo.Size = new System.Drawing.Size(1004, 180);
             this.grpProductInfo.TabIndex = 3;
             this.grpProductInfo.TabStop = false;
             this.grpProductInfo.Text = "THÔNG TIN SẢN PHẨM";
@@ -328,335 +329,7 @@
             this.btnSelectImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSelectImage.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.btnSelectImage.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
-            this.btnSelectImage.Location = new System.Drawing.Point(835, 153);
+            this.btnSelectImage.Location = new System.Drawing.Point(850, 138);
             this.btnSelectImage.Name = "btnSelectImage";
-            this.btnSelectImage.Size = new System.Drawing.Size(130, 28);
-            this.btnSelectImage.TabIndex = 14;
-            this.btnSelectImage.Text = "Chọn ảnh...";
-            this.btnSelectImage.UseVisualStyleBackColor = false;
-            this.btnSelectImage.Click += new System.EventHandler(this.btnSelectImage_Click);
-            // 
-            // picProduct
-            // 
-            this.picProduct.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
-            this.picProduct.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picProduct.Location = new System.Drawing.Point(835, 23);
-            this.picProduct.Name = "picProduct";
-            this.picProduct.Size = new System.Drawing.Size(130, 124);
-            this.picProduct.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picProduct.TabIndex = 13;
-            this.picProduct.TabStop = false;
-            // 
-            // chkConKinhDoanh
-            // 
-            this.chkConKinhDoanh.AutoSize = true;
-            this.chkConKinhDoanh.Checked = true;
-            this.chkConKinhDoanh.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkConKinhDoanh.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.chkConKinhDoanh.Location = new System.Drawing.Point(520, 150);
-            this.chkConKinhDoanh.Name = "chkConKinhDoanh";
-            this.chkConKinhDoanh.Size = new System.Drawing.Size(117, 21);
-            this.chkConKinhDoanh.TabIndex = 12;
-            this.chkConKinhDoanh.Text = "Còn kinh doanh";
-            this.chkConKinhDoanh.UseVisualStyleBackColor = true;
-            // 
-            // dtpNgayNhap
-            // 
-            this.dtpNgayNhap.CustomFormat = "dd/MM/yyyy";
-            this.dtpNgayNhap.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.dtpNgayNhap.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpNgayNhap.Location = new System.Drawing.Point(520, 108);
-            this.dtpNgayNhap.Name = "dtpNgayNhap";
-            this.dtpNgayNhap.Size = new System.Drawing.Size(260, 24);
-            this.dtpNgayNhap.TabIndex = 11;
-            // 
-            // numSoLuong
-            // 
-            this.numSoLuong.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.numSoLuong.Location = new System.Drawing.Point(520, 68);
-            this.numSoLuong.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
-            this.numSoLuong.Name = "numSoLuong";
-            this.numSoLuong.Size = new System.Drawing.Size(260, 24);
-            this.numSoLuong.TabIndex = 10;
-            // 
-            // numDonGia
-            // 
-            this.numDonGia.DecimalPlaces = 0;
-            this.numDonGia.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.numDonGia.Increment = new decimal(new int[] { 50000, 0, 0, 0 });
-            this.numDonGia.Location = new System.Drawing.Point(520, 28);
-            this.numDonGia.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
-            this.numDonGia.Name = "numDonGia";
-            this.numDonGia.Size = new System.Drawing.Size(260, 24);
-            this.numDonGia.TabIndex = 9;
-            this.numDonGia.ThousandsSeparator = true;
-            // 
-            // cboLoaiSP
-            // 
-            this.cboLoaiSP.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboLoaiSP.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.cboLoaiSP.FormattingEnabled = true;
-            this.cboLoaiSP.Location = new System.Drawing.Point(125, 108);
-            this.cboLoaiSP.Name = "cboLoaiSP";
-            this.cboLoaiSP.Size = new System.Drawing.Size(260, 25);
-            this.cboLoaiSP.TabIndex = 8;
-            // 
-            // txtTenSP
-            // 
-            this.txtTenSP.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.txtTenSP.Location = new System.Drawing.Point(125, 68);
-            this.txtTenSP.Name = "txtTenSP";
-            this.txtTenSP.Size = new System.Drawing.Size(260, 24);
-            this.txtTenSP.TabIndex = 7;
-            // 
-            // txtMaSP
-            // 
-            this.txtMaSP.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.txtMaSP.Location = new System.Drawing.Point(125, 28);
-            this.txtMaSP.Name = "txtMaSP";
-            this.txtMaSP.Size = new System.Drawing.Size(260, 24);
-            this.txtMaSP.TabIndex = 6;
-            // 
-            // lblNgayNhap
-            // 
-            this.lblNgayNhap.AutoSize = true;
-            this.lblNgayNhap.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblNgayNhap.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-            this.lblNgayNhap.Location = new System.Drawing.Point(430, 113);
-            this.lblNgayNhap.Name = "lblNgayNhap";
-            this.lblNgayNhap.Size = new System.Drawing.Size(68, 15);
-            this.lblNgayNhap.TabIndex = 5;
-            this.lblNgayNhap.Text = "Ngày nhập:";
-            // 
-            // lblSoLuong
-            // 
-            this.lblSoLuong.AutoSize = true;
-            this.lblSoLuong.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblSoLuong.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-            this.lblSoLuong.Location = new System.Drawing.Point(430, 73);
-            this.lblSoLuong.Name = "lblSoLuong";
-            this.lblSoLuong.Size = new System.Drawing.Size(57, 15);
-            this.lblSoLuong.TabIndex = 4;
-            this.lblSoLuong.Text = "Số lượng:";
-            // 
-            // lblDonGia
-            // 
-            this.lblDonGia.AutoSize = true;
-            this.lblDonGia.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblDonGia.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-            this.lblDonGia.Location = new System.Drawing.Point(430, 33);
-            this.lblDonGia.Name = "lblDonGia";
-            this.lblDonGia.Size = new System.Drawing.Size(51, 15);
-            this.lblDonGia.TabIndex = 3;
-            this.lblDonGia.Text = "Đơn giá:";
-            // 
-            // lblLoaiSP
-            // 
-            this.lblLoaiSP.AutoSize = true;
-            this.lblLoaiSP.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblLoaiSP.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-            this.lblLoaiSP.Location = new System.Drawing.Point(25, 113);
-            this.lblLoaiSP.Name = "lblLoaiSP";
-            this.lblLoaiSP.Size = new System.Drawing.Size(86, 15);
-            this.lblLoaiSP.TabIndex = 2;
-            this.lblLoaiSP.Text = "Loại sản phẩm:";
-            // 
-            // lblTenSP
-            // 
-            this.lblTenSP.AutoSize = true;
-            this.lblTenSP.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblTenSP.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-            this.lblTenSP.Location = new System.Drawing.Point(25, 73);
-            this.lblTenSP.Name = "lblTenSP";
-            this.lblTenSP.Size = new System.Drawing.Size(83, 15);
-            this.lblTenSP.TabIndex = 1;
-            this.lblTenSP.Text = "Tên sản phẩm:";
-            // 
-            // lblMaSP
-            // 
-            this.lblMaSP.AutoSize = true;
-            this.lblMaSP.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblMaSP.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-            this.lblMaSP.Location = new System.Drawing.Point(25, 33);
-            this.lblMaSP.Name = "lblMaSP";
-            this.lblMaSP.Size = new System.Drawing.Size(82, 15);
-            this.lblMaSP.TabIndex = 0;
-            this.lblMaSP.Text = "Mã sản phẩm:";
-            // 
-            // dgvProducts
-            // 
-            this.dgvProducts.AllowUserToAddRows = false;
-            this.dgvProducts.AllowUserToDeleteRows = false;
-            this.dgvProducts.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
-            this.dgvProducts.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dgvProducts.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
-            this.dgvProducts.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(62)))), ((int)(((byte)(80)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(0, 4, 0, 4);
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(62)))), ((int)(((byte)(80)))));
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dgvProducts.ColumnHeadersHeight = 36;
-            this.dgvProducts.ContextMenuStrip = this.ctxGridMenu;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(231)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvProducts.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dgvProducts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvProducts.EnableHeadersVisualStyles = false;
-            this.dgvProducts.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(232)))), ((int)(((byte)(240)))));
-            this.dgvProducts.Location = new System.Drawing.Point(0, 251);
-            this.dgvProducts.MultiSelect = false;
-            this.dgvProducts.Name = "dgvProducts";
-            this.dgvProducts.ReadOnly = true;
-            this.dgvProducts.RowHeadersVisible = false;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
-            this.dgvProducts.RowsDefaultCellStyle = dataGridViewCellStyle3;
-            this.dgvProducts.RowTemplate.Height = 30;
-            this.dgvProducts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvProducts.Size = new System.Drawing.Size(1004, 364);
-            this.dgvProducts.TabIndex = 4;
-            this.dgvProducts.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProducts_CellClick);
-            this.dgvProducts.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvProducts_CellMouseDown);
-            // 
-            // ctxGridMenu
-            // 
-            this.ctxGridMenu.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.ctxGridMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ctxEdit,
-            this.ctxDelete,
-            this.ctxViewDetail});
-            this.ctxGridMenu.Name = "ctxGridMenu";
-            this.ctxGridMenu.Size = new System.Drawing.Size(147, 70);
-            // 
-            // ctxEdit
-            // 
-            this.ctxEdit.Name = "ctxEdit";
-            this.ctxEdit.Size = new System.Drawing.Size(146, 22);
-            this.ctxEdit.Text = "Sửa";
-            this.ctxEdit.Click += new System.EventHandler(this.ExecuteEditAction);
-            // 
-            // ctxDelete
-            // 
-            this.ctxDelete.Name = "ctxDelete";
-            this.ctxDelete.Size = new System.Drawing.Size(146, 22);
-            this.ctxDelete.Text = "Xóa";
-            this.ctxDelete.Click += new System.EventHandler(this.ExecuteDeleteAction);
-            // 
-            // ctxViewDetail
-            // 
-            this.ctxViewDetail.Name = "ctxViewDetail";
-            this.ctxViewDetail.Size = new System.Drawing.Size(146, 22);
-            this.ctxViewDetail.Text = "Xem chi tiết";
-            this.ctxViewDetail.Click += new System.EventHandler(this.ctxViewDetail_Click);
-            // 
-            // errValidator
-            // 
-            this.errValidator.ContainerControl = this;
-            // 
-            // dlgOpenFile
-            // 
-            this.dlgOpenFile.Filter = "Ảnh sản phẩm (*.jpg;*.jpeg;*.png;*.bmp)|*.jpg;*.jpeg;*.png;*.bmp";
-            this.dlgOpenFile.Title = "Chọn hình ảnh sản phẩm";
-            // 
-            // dlgSaveFile
-            // 
-            this.dlgSaveFile.Filter = "Tài liệu Text (*.txt)|*.txt";
-            this.dlgSaveFile.Title = "Lưu danh sách sản phẩm";
-            // 
-            // FrmProduct
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1004, 641);
-            this.Controls.Add(this.dgvProducts);
-            this.Controls.Add(this.grpProductInfo);
-            this.Controls.Add(this.stStrip);
-            this.Controls.Add(this.tlsActions);
-            this.Controls.Add(this.mnuMain);
-            this.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.MainMenuStrip = this.mnuMain;
-            this.MinimumSize = new System.Drawing.Size(950, 600);
-            this.Name = "FrmProduct";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Quản lý sản phẩm";
-            this.Load += new System.EventHandler(this.FrmProduct_Load);
-            this.mnuMain.ResumeLayout(false);
-            this.mnuMain.PerformLayout();
-            this.tlsActions.ResumeLayout(false);
-            this.tlsActions.PerformLayout();
-            this.stStrip.ResumeLayout(false);
-            this.stStrip.PerformLayout();
-            this.grpProductInfo.ResumeLayout(false);
-            this.grpProductInfo.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picProduct)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numSoLuong)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDonGia)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvProducts)).EndInit();
-            this.ctxGridMenu.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.errValidator)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
-        }
-
-        #endregion
-
-        private System.Windows.Forms.MenuStrip mnuMain;
-        private System.Windows.Forms.ToolStripMenuItem mnuFile;
-        private System.Windows.Forms.ToolStripMenuItem mnuFileExport;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem mnuFileExit;
-        private System.Windows.Forms.ToolStripMenuItem mnuManage;
-        private System.Windows.Forms.ToolStripMenuItem mnuManageAdd;
-        private System.Windows.Forms.ToolStripMenuItem mnuManageEdit;
-        private System.Windows.Forms.ToolStripMenuItem mnuManageDelete;
-        private System.Windows.Forms.ToolStripMenuItem mnuHelp;
-        private System.Windows.Forms.ToolStripMenuItem mnuHelpAbout;
-        private System.Windows.Forms.ToolStrip tlsActions;
-        private System.Windows.Forms.ToolStripButton btnToolAdd;
-        private System.Windows.Forms.ToolStripButton btnToolEdit;
-        private System.Windows.Forms.ToolStripButton btnToolDelete;
-        private System.Windows.Forms.ToolStripButton btnToolRefresh;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripTextBox txtSearchKeyword;
-        private System.Windows.Forms.ToolStripButton btnToolSearch;
-        private System.Windows.Forms.StatusStrip stStrip;
-        private System.Windows.Forms.ToolStripStatusLabel lblStatus;
-        private System.Windows.Forms.ToolStripStatusLabel lblProductCount;
-        private System.Windows.Forms.ToolStripStatusLabel lblInventoryValue;
-        private System.Windows.Forms.GroupBox grpProductInfo;
-        private System.Windows.Forms.Label lblLoaiSP;
-        private System.Windows.Forms.Label lblTenSP;
-        private System.Windows.Forms.Label lblMaSP;
-        private System.Windows.Forms.Label lblNgayNhap;
-        private System.Windows.Forms.Label lblSoLuong;
-        private System.Windows.Forms.Label lblDonGia;
-        private System.Windows.Forms.TextBox txtTenSP;
-        private System.Windows.Forms.TextBox txtMaSP;
-        private System.Windows.Forms.ComboBox cboLoaiSP;
-        private System.Windows.Forms.NumericUpDown numSoLuong;
-        private System.Windows.Forms.NumericUpDown numDonGia;
-        private System.Windows.Forms.DateTimePicker dtpNgayNhap;
-        private System.Windows.Forms.CheckBox chkConKinhDoanh;
-        private System.Windows.Forms.PictureBox picProduct;
-        private System.Windows.Forms.Button btnSelectImage;
-        private System.Windows.Forms.DataGridView dgvProducts;
-        private System.Windows.Forms.ContextMenuStrip ctxGridMenu;
-        private System.Windows.Forms.ToolStripMenuItem ctxEdit;
-        private System.Windows.Forms.ToolStripMenuItem ctxDelete;
-        private System.Windows.Forms.ToolStripMenuItem ctxViewDetail;
-        private System.Windows.Forms.ErrorProvider errValidator;
-        private System.Windows.Forms.OpenFileDialog dlgOpenFile;
-        private System.Windows.Forms.SaveFileDialog dlgSaveFile;
-    }
-}
+            this.btnSelectImage.Size = new System.Drawing.Size(120, 28);
+            this.btn
