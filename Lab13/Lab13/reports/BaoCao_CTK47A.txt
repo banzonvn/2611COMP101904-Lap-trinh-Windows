@@ -1,0 +1,34 @@
+﻿==========================================================================================
+                 TRƯỜNG ĐẠI HỌC SƯ PHẠM THÀNH PHỐ HỒ CHÍ MINH
+                             KHOA CÔNG NGHỆ THÔNG TIN
+==========================================================================================
+
+                         BÁO CÁO KẾT QUẢ HỌC TẬP SINH VIÊN
+                    Lớp: CNTT K47A - Điều kiện: Tất cả
+                    Thời gian lập báo cáo: 29/10/2026 22:35:49
+
++-----+---------------+---------------------------+------------+-------+-----------+------------+
+| STT | Mã SV         | Họ và Tên                 | Tên Lớp    | Điểm  | Kết Quả   | Xếp Loại   |
++-----+---------------+---------------------------+------------+-------+-----------+------------+
+|   1 | 51.01.104.082 | Lê Hoàng Quân             | CNTT K47A  |   9,8 | Đạt       | Xuất sắc   |
+|   2 | SV004         | Phạm Thanh Dung           | CNTT K47A  |   9,0 | Đạt       | Xuất sắc   |
+|   3 | SV001         | Nguyễn Văn An             | CNTT K47A  |   8,5 | Đạt       | Giỏi       |
+|   4 | SV002         | Trần Thị Bình             | CNTT K47A  |   6,8 | Đạt       | Khá        |
+|   5 | SV003         | Lê Minh Cường             | CNTT K47A  |   4,2 | Không đạt | Yếu        |
++-----+---------------+---------------------------+------------+-------+-----------+------------+
+
+--- THỐNG KÊ TỔNG QUAN ---
+* Tổng số sinh viên hiển thị : 5 sinh viên
+* Số lượng sinh viên ĐẠT     : 4 sinh viên (80,0%)
+* Số sinh viên KHÔNG ĐẠT     : 1 sinh viên
+* Điểm trung bình nhóm lọc   : 7,66 điểm
+* Điểm cao nhất / Thấp nhất  : 9,8 / 4,2 điểm
+
+                                                TP. Hồ Chí Minh, Ngày .... Tháng .... Năm 2026
+        NGƯỜI LẬP BÁO CÁO                                    TRƯỞNG KHOA / GIẢNG VIÊN
+          (Ký và ghi rõ họ tên)                                 (Ký và ghi rõ họ tên)
+
+
+           Lê Hoàng Quân                                          ThS. Lê Thanh Thoại
+         MSSV: 51.01.104.082
+==========================================================================================
