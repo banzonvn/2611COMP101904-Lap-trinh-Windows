@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>StudentCardPrinter</RootNamespace>
+    <AssemblyName>COMP1019_Lab09_StudentCardPrinter</AssemblyName>
+  </PropertyGroup>
+
+</Project>
