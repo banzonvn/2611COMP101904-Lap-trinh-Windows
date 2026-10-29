@@ -660,6 +660,56 @@ namespace COMP1019_Lab08_SimplePaint
 
         #region Hỗ trợ hiển thị Trạng thái
 
+        public void SetMode(DrawMode mode)
+        {
+            cboMode.SelectedItem = mode.ToString();
+        }
+
+        public void SetStrokeWidth(decimal width)
+        {
+            nudWidth.Value = Math.Clamp(width, nudWidth.Minimum, nudWidth.Maximum);
+        }
+
+        public void SetFill(bool fill)
+        {
+            chkFill.Checked = fill;
+        }
+
+        public void SetCurrentColor(Color color)
+        {
+            currentColor = color;
+            pnlColorPreview.BackColor = color;
+        }
+
+        public void SetCanvasBgColor(Color color)
+        {
+            canvas.BackColor = color;
+        }
+
+        public void SetBackgroundImage(Bitmap? bmp)
+        {
+            canvas.BackgroundImageBitmap?.Dispose();
+            canvas.BackgroundImageBitmap = bmp;
+        }
+
+        public void ClearShapes()
+        {
+            items.Clear();
+            redoStack.Clear();
+            canvas.Invalidate();
+        }
+
+        public void AddShape(DrawItem item)
+        {
+            items.Add(item);
+            canvas.Invalidate();
+        }
+
+        public void SetStatusText(string text)
+        {
+            lblStatus.Text = text;
+        }
+
         private void UpdateMouseCoordinates(int x, int y)
         {
             lblStatus.Text = $"X = {x}, Y = {y} | Chế độ: {CurrentMode} | Độ dày: {nudWidth.Value}px | Đối tượng: {items.Count} | (Ctrl+Z: Undo, Ctrl+Y: Redo, Ctrl+S: Lưu)";
