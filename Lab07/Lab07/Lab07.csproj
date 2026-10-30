@@ -1,11 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
-    <ImplicitUsings>disable</ImplicitUsings>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>COMP1019_Buoi07_Lab07</AssemblyName>
     <RootNamespace>Lab07</RootNamespace>
-    <AssemblyName>Lab07</AssemblyName>
+    <NoWarn>$(NoWarn);WFO1000</NoWarn>
   </PropertyGroup>
+
 </Project>
