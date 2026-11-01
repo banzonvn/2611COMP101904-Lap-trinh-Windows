@@ -5,21 +5,24 @@ namespace QLSinhVienLab12.DAL
 {
     public static class Database
     {
-        public static string ConnectionString { get; set; } =
-            "Data Source=.;Initial Catalog=QLSinhVienLab12;Integrated Security=True;TrustServerCertificate=True";
+        // Connection string mặc định cho máy nội bộ và phòng máy thực hành
+        public static string ConnectionString =
+            @"Data Source=.;Initial Catalog=QLSinhVienLab12;Integrated Security=True;TrustServerCertificate=True;Connect Timeout=2";
 
-        public static bool TestConnection(out string message)
+        // Connection string dự phòng cho SQL Server Express
+        public static string ExpressConnectionString =
+            @"Data Source=.\SQLEXPRESS;Initial Catalog=QLSinhVienLab12;Integrated Security=True;TrustServerCertificate=True;Connect Timeout=2";
+
+        public static bool CheckConnection(string connStr)
         {
             try
             {
-                using var conn = new SqlConnection(ConnectionString);
+                using var conn = new SqlConnection(connStr);
                 conn.Open();
-                message = "Kết nối SQL Server thành công (Database: QLSinhVienLab12).";
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
-                message = "Không thể kết nối SQL Server: " + ex.Message;
                 return false;
             }
         }
