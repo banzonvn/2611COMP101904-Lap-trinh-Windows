@@ -51,9 +51,9 @@ namespace COMP1019_Lab10_EduManagerStudio
 
         private void InitializeComponent()
         {
-            this.Text = "EduManager Studio - SQL Server Query Inspector | COMP1019 Lab 10 - Lê Hoàng Quân (51.01.104.082)";
-            this.Size = new Size(1300, 850);
-            this.MinimumSize = new Size(1000, 700);
+            this.Text = "EduManager Studio - SQL Server Query Inspector | COMP1019 Lab 10 - Lê Hoàng Quân (MSSV: 51.01.104.082)";
+            this.Size = new Size(1360, 880);
+            this.MinimumSize = new Size(1100, 720);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Font = new Font("Segoe UI", 9.5f, FontStyle.Regular);
             this.BackColor = Color.FromArgb(243, 244, 246);
@@ -62,27 +62,16 @@ namespace COMP1019_Lab10_EduManagerStudio
             _pnlHeader = new Panel
             {
                 Dock = DockStyle.Top,
-                Height = 85,
+                Height = 88,
                 BackColor = Color.FromArgb(15, 23, 42) // Dark Navy
             };
             _pnlHeader.Paint += PnlHeader_Paint;
 
-            _lblTitle = new Label
+            var pnlHeaderRight = new Panel
             {
-                Text = "EDUMANAGER DB - T-SQL QUERY & DATABASE STUDIO",
-                ForeColor = Color.White,
-                Font = new Font("Segoe UI", 13.5f, FontStyle.Bold),
-                Location = new Point(20, 14),
-                AutoSize = true
-            };
-
-            _lblSub = new Label
-            {
-                Text = "COMP1019 - Lập trình trên Windows | Lab 10: Thiết kế và cài đặt CSDL EduManagerDB",
-                ForeColor = Color.FromArgb(148, 163, 184),
-                Font = new Font("Segoe UI", 9.5f),
-                Location = new Point(22, 45),
-                AutoSize = true
+                Dock = DockStyle.Right,
+                Width = 530,
+                BackColor = Color.Transparent
             };
 
             _lblStudentBadge = new Label
@@ -91,10 +80,10 @@ namespace COMP1019_Lab10_EduManagerStudio
                 ForeColor = Color.FromArgb(56, 189, 248),
                 BackColor = Color.FromArgb(30, 41, 59),
                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
-                Location = new Point(780, 16),
-                Padding = new Padding(10, 6, 10, 6),
+                Location = new Point(10, 12),
+                Padding = new Padding(12, 6, 12, 6),
                 AutoSize = true,
-                Anchor = AnchorStyles.Top | AnchorStyles.Right
+                UseMnemonic = false
             };
 
             _btnRun = new Button
@@ -104,10 +93,9 @@ namespace COMP1019_Lab10_EduManagerStudio
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
-                Location = new Point(780, 48),
-                Size = new Size(130, 30),
-                Cursor = Cursors.Hand,
-                Anchor = AnchorStyles.Top | AnchorStyles.Right
+                Location = new Point(10, 46),
+                Size = new Size(140, 32),
+                Cursor = Cursors.Hand
             };
             _btnRun.FlatAppearance.BorderSize = 0;
             _btnRun.Click += (s, e) => RunCurrentQuery();
@@ -119,10 +107,9 @@ namespace COMP1019_Lab10_EduManagerStudio
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
                 Font = new Font("Segoe UI", 9.0f),
-                Location = new Point(920, 48),
-                Size = new Size(130, 30),
-                Cursor = Cursors.Hand,
-                Anchor = AnchorStyles.Top | AnchorStyles.Right
+                Location = new Point(160, 46),
+                Size = new Size(140, 32),
+                Cursor = Cursors.Hand
             };
             _btnReset.FlatAppearance.BorderSize = 0;
             _btnReset.Click += (s, e) =>
@@ -132,7 +119,29 @@ namespace COMP1019_Lab10_EduManagerStudio
                 MessageBox.Show("Đã khôi phục dữ liệu mẫu ban đầu của EduManagerDB thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             };
 
-            _pnlHeader.Controls.AddRange(new Control[] { _lblTitle, _lblSub, _lblStudentBadge, _btnRun, _btnReset });
+            pnlHeaderRight.Controls.AddRange(new Control[] { _lblStudentBadge, _btnRun, _btnReset });
+
+            _lblTitle = new Label
+            {
+                Text = "EDUMANAGER DB — T-SQL QUERY & DATABASE STUDIO",
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 13.5f, FontStyle.Bold),
+                Location = new Point(20, 15),
+                AutoSize = true,
+                UseMnemonic = false
+            };
+
+            _lblSub = new Label
+            {
+                Text = "COMP1019 - Lập trình trên Windows | Lab 10: Thiết kế và cài đặt CSDL EduManagerDB",
+                ForeColor = Color.FromArgb(148, 163, 184),
+                Font = new Font("Segoe UI", 9.5f),
+                Location = new Point(22, 48),
+                AutoSize = true,
+                UseMnemonic = false
+            };
+
+            _pnlHeader.Controls.AddRange(new Control[] { pnlHeaderRight, _lblTitle, _lblSub });
 
             // 2. Status Strip
             _statusStrip = new StatusStrip
@@ -152,26 +161,27 @@ namespace COMP1019_Lab10_EduManagerStudio
             _pnlLeft = new Panel
             {
                 Dock = DockStyle.Left,
-                Width = 350,
+                Width = 470,
                 BackColor = Color.White,
                 Padding = new Padding(12)
             };
 
             _lblLeftTitle = new Label
             {
-                Text = "DANH SÁCH 12 TRUY VẤN YÊU CẦU",
+                Text = "DANH SÁCH 14 TRUY VẤN YÊU CẦU & KIỂM THỬ",
                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(15, 23, 42),
                 Dock = DockStyle.Top,
-                Height = 28
+                Height = 28,
+                UseMnemonic = false
             };
 
             _lstQueries = new ListBox
             {
                 Dock = DockStyle.Top,
-                Height = 360,
+                Height = 390,
                 Font = new Font("Segoe UI", 9.2f),
-                ItemHeight = 28,
+                ItemHeight = 27,
                 BorderStyle = BorderStyle.FixedSingle,
                 DrawMode = DrawMode.OwnerDrawFixed
             };
@@ -192,7 +202,8 @@ namespace COMP1019_Lab10_EduManagerStudio
                 ForeColor = Color.FromArgb(15, 23, 42),
                 Dock = DockStyle.Top,
                 Height = 28,
-                Padding = new Padding(0, 8, 0, 0)
+                Padding = new Padding(0, 8, 0, 0),
+                UseMnemonic = false
             };
 
             _tvDbExplorer = new TreeView
@@ -220,26 +231,28 @@ namespace COMP1019_Lab10_EduManagerStudio
             var pnlQueryHeader = new Panel
             {
                 Dock = DockStyle.Top,
-                Height = 55,
+                Height = 65,
                 BackColor = Color.White,
-                Padding = new Padding(12, 8, 12, 8)
+                Padding = new Padding(12, 6, 12, 6)
             };
 
             _lblQueryName = new Label
             {
                 Text = "Tên Truy Vấn",
-                Font = new Font("Segoe UI", 11.5f, FontStyle.Bold),
+                Font = new Font("Segoe UI", 12f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(15, 23, 42),
                 Dock = DockStyle.Top,
-                Height = 22
+                Height = 28,
+                UseMnemonic = false
             };
 
             _lblQueryDesc = new Label
             {
                 Text = "Mô tả mục đích và kỹ thuật T-SQL sử dụng",
-                Font = new Font("Segoe UI", 9.0f),
+                Font = new Font("Segoe UI", 9.2f),
                 ForeColor = Color.FromArgb(100, 116, 139),
-                Dock = DockStyle.Fill
+                Dock = DockStyle.Fill,
+                UseMnemonic = false
             };
             pnlQueryHeader.Controls.Add(_lblQueryDesc);
             pnlQueryHeader.Controls.Add(_lblQueryName);
@@ -247,11 +260,12 @@ namespace COMP1019_Lab10_EduManagerStudio
             var lblSqlTitle = new Label
             {
                 Text = "CÂU LỆNH T-SQL SCRIPT:",
-                Font = new Font("Segoe UI", 8.8f, FontStyle.Bold),
+                Font = new Font("Segoe UI", 9.0f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(71, 85, 105),
                 Dock = DockStyle.Top,
-                Height = 22,
-                Padding = new Padding(0, 6, 0, 0)
+                Height = 32,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Padding = new Padding(2, 6, 0, 2)
             };
 
             _rtbSqlScript = new RichTextBox
@@ -295,13 +309,15 @@ namespace COMP1019_Lab10_EduManagerStudio
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 EnableHeadersVisualStyles = false
             };
+            _dgvResults.ColumnHeadersHeight = 36;
+            _dgvResults.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             _dgvResults.ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle
             {
                 BackColor = Color.FromArgb(30, 41, 59),
                 ForeColor = Color.White,
                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
                 Alignment = DataGridViewContentAlignment.MiddleLeft,
-                Padding = new Padding(6)
+                Padding = new Padding(8, 0, 8, 0)
             };
             _dgvResults.DefaultCellStyle = new DataGridViewCellStyle
             {

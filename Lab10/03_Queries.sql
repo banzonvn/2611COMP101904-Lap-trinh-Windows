@@ -227,3 +227,41 @@ BEGIN CATCH
     PRINT N'Thông điệp lỗi SQL Server: ' + ERROR_MESSAGE();
 END CATCH;
 GO
+
+-- ============================================================================
+-- TRUY VẤN 13: Kiểm tra vi phạm ràng buộc CHECK Giới tính (CK_SINHVIEN_GioiTinh)
+-- Kỹ thuật: Chèn sinh viên với giới tính không thuộc 'Nam' hoặc 'Nữ' (VD: N'Khác')
+-- Kỳ vọng: SQL Server chặn lại với lỗi 547 (CK_SINHVIEN_GioiTinh violation)
+-- ============================================================================
+PRINT N'--- CÂU 13: TEST VI PHẠM RÀNG BUỘC CHECK GIỚI TÍNH (CK_SINHVIEN_GioiTinh) ---';
+BEGIN TRY
+    INSERT INTO SINHVIEN (MaSV, HoTen, NgaySinh, GioiTinh, MaLop)
+    VALUES ('SV998', N'Sinh Viên Test Giới Tính', '2003-01-01', N'Khác', '51.CNTT.A');
+    
+    PRINT N'[THẤT BẠI] Lẽ ra phải bị chặn bởi ràng buộc CK_SINHVIEN_GioiTinh!';
+END TRY
+BEGIN CATCH
+    PRINT N'[THÀNH CÔNG - ĐÃ BẮT LỖI CHECK GIỚI TÍNH THEO ĐÚNG THIẾT KẾ]';
+    PRINT N'Mã lỗi: ' + CAST(ERROR_NUMBER() AS NVARCHAR(10));
+    PRINT N'Thông điệp lỗi SQL Server: ' + ERROR_MESSAGE();
+END CATCH;
+GO
+
+-- ============================================================================
+-- TRUY VẤN 14: Kiểm tra vi phạm ràng buộc Khóa chính (PK_SINHVIEN)
+-- Kỹ thuật: Chèn sinh viên với MaSV đã tồn tại ('51.01.104.082')
+-- Kỳ vọng: SQL Server chặn lại với lỗi 2627 (Primary Key violation)
+-- ============================================================================
+PRINT N'--- CÂU 14: TEST VI PHẠM KHÓA CHÍNH (PK_SINHVIEN) ---';
+BEGIN TRY
+    INSERT INTO SINHVIEN (MaSV, HoTen, NgaySinh, GioiTinh, MaLop)
+    VALUES ('51.01.104.082', N'Sinh Viên Trùng Mã Khóa Chính', '2003-01-01', N'Nam', '51.CNTT.A');
+    
+    PRINT N'[THẤT BẠI] Lẽ ra phải bị chặn bởi khóa chính PK_SINHVIEN!';
+END TRY
+BEGIN CATCH
+    PRINT N'[THÀNH CÔNG - ĐÃ BẮT LỖI TRÙNG KHÓA CHÍNH THEO ĐÚNG THIẾT KẾ]';
+    PRINT N'Mã lỗi: ' + CAST(ERROR_NUMBER() AS NVARCHAR(10));
+    PRINT N'Thông điệp lỗi SQL Server: ' + ERROR_MESSAGE();
+END CATCH;
+GO

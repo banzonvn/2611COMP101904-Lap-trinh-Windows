@@ -23,7 +23,7 @@ namespace COMP1019_Lab10_EduManagerStudio
 
         private static void RunCaptureMode()
         {
-            Console.WriteLine("[EduManagerStudio] Starting automatic screenshot generation for all 12 queries...");
+            Console.WriteLine("[EduManagerStudio] Starting automatic screenshot generation for all 14 queries...");
 
             string appDir = AppDomain.CurrentDomain.BaseDirectory;
             // Target output directories
@@ -51,7 +51,9 @@ namespace COMP1019_Lab10_EduManagerStudio
                 "09_thong_ke_sinh_vien_theo_lop.png",
                 "10_lop_co_tu_2_sinh_vien.png",
                 "11_test_vi_pham_khoa_ngoai.png",
-                "12_test_vi_pham_rang_buoc_check.png"
+                "12_test_vi_pham_rang_buoc_check.png",
+                "13_test_vi_pham_check_gioi_tinh.png",
+                "14_test_vi_pham_trung_khoa_chinh.png"
             };
 
             for (int i = 0; i < fileNames.Length; i++)
@@ -63,11 +65,11 @@ namespace COMP1019_Lab10_EduManagerStudio
                 form.ExecuteAndCapture(i, projPath);
                 File.Copy(projPath, parentPath, true);
 
-                Console.WriteLine($"[Captured {i + 1}/12]: {fileName}");
+                Console.WriteLine($"[Captured {i + 1}/{fileNames.Length}]: {fileName}");
                 Thread.Sleep(100);
             }
 
-            Console.WriteLine("[EduManagerStudio] All 12 screenshots generated successfully!");
+            Console.WriteLine("[EduManagerStudio] All 14 screenshots generated successfully!");
             Environment.Exit(0);
         }
     }

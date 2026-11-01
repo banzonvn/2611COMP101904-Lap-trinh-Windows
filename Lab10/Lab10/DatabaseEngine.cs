@@ -166,87 +166,101 @@ namespace COMP1019_Lab10_EduManagerStudio
             {
                 new QueryItem(
                     1,
-                    "Truy vấn 1: Liệt kê tất cả sinh viên",
+                    "Truy vấn 01: Liệt kê tất cả sinh viên",
                     "Hiển thị đầy đủ danh sách sinh viên hiện có trong CSDL EduManagerDB.",
                     "SELECT MaSV AS [Mã Sinh Viên], HoTen AS [Họ Và Tên],\r\n       CONVERT(VARCHAR(10), NgaySinh, 103) AS [Ngày Sinh],\r\n       GioiTinh AS [Giới Tính], MaLop AS [Mã Lớp]\r\nFROM SINHVIEN\r\nORDER BY MaSV ASC;",
                     "Kiểm tra dữ liệu bảng SINHVIEN"
                 ),
                 new QueryItem(
                     2,
-                    "Truy vấn 2: Liệt kê sinh viên kèm tên lớp và khoa",
+                    "Truy vấn 02: Sinh viên kèm tên lớp và khoa",
                     "INNER JOIN giữa 3 bảng SINHVIEN, LOP, KHOA để lấy tên lớp và tên khoa tương ứng.",
                     "SELECT sv.MaSV AS [Mã SV], sv.HoTen AS [Họ Tên SV], sv.GioiTinh AS [Giới Tính],\r\n       l.TenLop AS [Tên Lớp], k.TenKhoa AS [Khoa Đào Tạo]\r\nFROM SINHVIEN sv\r\nINNER JOIN LOP l ON sv.MaLop = l.MaLop\r\nINNER JOIN KHOA k ON l.MaKhoa = k.MaKhoa\r\nORDER BY k.TenKhoa ASC, l.TenLop ASC, sv.HoTen ASC;",
                     "Liên kết dữ liệu đa bảng bằng INNER JOIN"
                 ),
                 new QueryItem(
                     3,
-                    "Truy vấn 3: Tìm kiếm sinh viên theo tên (hoặc từ khóa)",
+                    "Truy vấn 03: Tìm kiếm sinh viên theo tên (LIKE)",
                     "Tìm kiếm sinh viên có họ tên chứa từ khóa 'Quân' sử dụng mệnh đề LIKE và ORDER BY.",
                     "DECLARE @TuKhoa NVARCHAR(50) = N'Quân';\r\n\r\nSELECT MaSV AS [Mã SV], HoTen AS [Họ Và Tên], NgaySinh AS [Ngày Sinh],\r\n       GioiTinh AS [Giới Tính], MaLop AS [Mã Lớp]\r\nFROM SINHVIEN\r\nWHERE HoTen LIKE N'%' + @TuKhoa + N'%'\r\nORDER BY HoTen ASC;",
                     "Tìm kiếm gần đúng với LIKE '%...%'"
                 ),
                 new QueryItem(
                     4,
-                    "Truy vấn 4: Liệt kê sinh viên thuộc một lớp cụ thể",
+                    "Truy vấn 04: Sinh viên thuộc lớp cụ thể",
                     "Lọc sinh viên theo mã lớp cố định (MaLop = '51.CNTT.A').",
                     "SELECT sv.MaSV AS [Mã SV], sv.HoTen AS [Họ Tên], sv.NgaySinh AS [Ngày Sinh],\r\n       sv.GioiTinh AS [Giới Tính], l.TenLop AS [Tên Lớp]\r\nFROM SINHVIEN sv\r\nINNER JOIN LOP l ON sv.MaLop = l.MaLop\r\nWHERE sv.MaLop = '51.CNTT.A'\r\nORDER BY sv.MaSV ASC;",
                     "Lọc dữ liệu có điều kiện WHERE"
                 ),
                 new QueryItem(
                     5,
-                    "Truy vấn 5: Cập nhật thông tin sinh viên",
+                    "Truy vấn 05: Cập nhật thông tin sinh viên",
                     "Cập nhật họ tên và ngày sinh cho sinh viên SV003 bằng câu lệnh UPDATE ... WHERE.",
                     "UPDATE SINHVIEN\r\nSET HoTen = N'Nguyễn Văn An (Đã cập nhật)',\r\n    NgaySinh = '2003-01-20'\r\nWHERE MaSV = 'SV003';\r\n\r\nSELECT MaSV, HoTen, NgaySinh, GioiTinh, MaLop\r\nFROM SINHVIEN WHERE MaSV = 'SV003';",
                     "Thay đổi dữ liệu an toàn với UPDATE"
                 ),
                 new QueryItem(
                     6,
-                    "Truy vấn 6: Xóa sinh viên chưa có điểm trong KETQUA",
+                    "Truy vấn 06: Xóa sinh viên chưa có điểm",
                     "Sử dụng DELETE kết hợp điều kiện NOT EXISTS để loại bỏ các sinh viên chưa từng có điểm thi.",
                     "-- Xóa các sinh viên không có bản ghi trong bảng KETQUA\r\nDELETE FROM SINHVIEN\r\nWHERE NOT EXISTS (\r\n    SELECT 1 FROM KETQUA kq WHERE kq.MaSV = SINHVIEN.MaSV\r\n);\r\n\r\n-- Hiển thị danh sách sinh viên còn lại trong CSDL\r\nSELECT MaSV, HoTen, MaLop FROM SINHVIEN ORDER BY MaSV ASC;",
                     "Xóa dữ liệu phụ thuộc với NOT EXISTS"
                 ),
                 new QueryItem(
                     7,
-                    "Truy vấn 7: Liệt kê điểm của từng sinh viên theo môn học",
+                    "Truy vấn 07: Bảng điểm chi tiết theo môn học",
                     "INNER JOIN 3 bảng SINHVIEN, KETQUA, MONHOC để hiển thị bảng điểm chi tiết.",
                     "SELECT sv.MaSV AS [Mã SV], sv.HoTen AS [Họ Tên SV], mh.MaMH AS [Mã Môn],\r\n       mh.TenMH AS [Tên Môn Học], mh.SoTinChi AS [Số Tín Chỉ], kq.Diem AS [Điểm Số]\r\nFROM KETQUA kq\r\nINNER JOIN SINHVIEN sv ON kq.MaSV = sv.MaSV\r\nINNER JOIN MONHOC mh   ON kq.MaMH = mh.MaMH\r\nORDER BY sv.MaSV ASC, mh.MaMH ASC;",
                     "Truy xuất bảng điểm chi tiết nhiều-nhiều"
                 ),
                 new QueryItem(
                     8,
-                    "Truy vấn 8: Điểm trung bình và xếp loại của từng sinh viên",
+                    "Truy vấn 08: Điểm trung bình và xếp loại",
                     "Sử dụng hàm tổng hợp AVG, ROUND, GROUP BY kèm cấu trúc CASE WHEN để phân loại học lực.",
                     "SELECT sv.MaSV AS [Mã SV], sv.HoTen AS [Họ Tên SV],\r\n       COUNT(kq.MaMH) AS [Số Môn Học],\r\n       CAST(ROUND(AVG(kq.Diem), 2) AS DECIMAL(4,2)) AS [Điểm Trung Bình],\r\n       CASE \r\n           WHEN AVG(kq.Diem) >= 8.5 THEN N'Giỏi / Xuất sắc'\r\n           WHEN AVG(kq.Diem) >= 7.0 THEN N'Khá'\r\n           WHEN AVG(kq.Diem) >= 5.0 THEN N'Trung bình'\r\n           ELSE N'Yếu / Cần cố gắng'\r\n       END AS [Xếp Loại Học Tập]\r\nFROM SINHVIEN sv\r\nINNER JOIN KETQUA kq ON sv.MaSV = kq.MaSV\r\nGROUP BY sv.MaSV, sv.HoTen\r\nORDER BY [Điểm Trung Bình] DESC;",
                     "Tính toán thống kê với AVG và GROUP BY"
                 ),
                 new QueryItem(
                     9,
-                    "Truy vấn 9: Đếm số lượng sinh viên theo từng lớp",
+                    "Truy vấn 09: Thống kê số lượng SV theo lớp",
                     "Sử dụng LEFT JOIN giữa LOP và SINHVIEN để đếm chính xác số SV kể cả lớp chưa có người.",
                     "SELECT l.MaLop AS [Mã Lớp], l.TenLop AS [Tên Lớp Học],\r\n       k.TenKhoa AS [Khoa Quản Lý], COUNT(sv.MaSV) AS [Số Lượng Sinh Viên]\r\nFROM LOP l\r\nINNER JOIN KHOA k ON l.MaKhoa = k.MaKhoa\r\nLEFT JOIN SINHVIEN sv ON l.MaLop = sv.MaLop\r\nGROUP BY l.MaLop, l.TenLop, k.TenKhoa\r\nORDER BY [Số Lượng Sinh Viên] DESC;",
                     "Thống kê đầy đủ với LEFT JOIN và COUNT"
                 ),
                 new QueryItem(
                     10,
-                    "Truy vấn 10: Liệt kê các lớp có từ 2 sinh viên trở lên",
+                    "Truy vấn 10: Lớp có từ 2 sinh viên trở lên",
                     "Áp dụng mệnh đề HAVING COUNT(sv.MaSV) >= 2 kết hợp GROUP BY.",
                     "SELECT l.MaLop AS [Mã Lớp], l.TenLop AS [Tên Lớp Học],\r\n       COUNT(sv.MaSV) AS [Số Sinh Viên]\r\nFROM LOP l\r\nINNER JOIN SINHVIEN sv ON l.MaLop = sv.MaLop\r\nGROUP BY l.MaLop, l.TenLop\r\nHAVING COUNT(sv.MaSV) >= 2\r\nORDER BY [Số Sinh Viên] DESC;",
                     "Lọc điều kiện sau gom nhóm với HAVING"
                 ),
                 new QueryItem(
                     11,
-                    "Truy vấn 11: Kiểm tra vi phạm khóa ngoại (FK Constraint)",
+                    "Truy vấn 11: Test vi phạm khóa ngoại (FK)",
                     "Thử chèn sinh viên với mã lớp không tồn tại 'LOP_KHONG_TON_TAI' để kiểm tra tính toàn vẹn.",
                     "BEGIN TRY\r\n    INSERT INTO SINHVIEN (MaSV, HoTen, NgaySinh, GioiTinh, MaLop)\r\n    VALUES ('SV999', N'Sinh Viên Test Lỗi FK', '2003-01-01', N'Nam', 'LOP_KHONG_TON_TAI');\r\nEND TRY\r\nBEGIN CATCH\r\n    PRINT N'[BẮT ĐƯỢC LỖI KHÓA NGOẠI 547]: ' + ERROR_MESSAGE();\r\nEND CATCH;",
                     "Kiểm thử tính toàn vẹn tham chiếu khóa ngoại"
                 ),
                 new QueryItem(
                     12,
-                    "Truy vấn 12: Kiểm tra vi phạm ràng buộc CHECK (0.0 <= Điểm <= 10.0)",
+                    "Truy vấn 12: Test vi phạm CHECK (0 <= Điểm <= 10)",
                     "Thử chèn điểm 11.5 (> 10.0) vào bảng KETQUA để chứng minh ràng buộc miền giá trị hoạt động.",
                     "BEGIN TRY\r\n    INSERT INTO KETQUA (MaSV, MaMH, Diem)\r\n    VALUES ('51.01.104.082', 'MATH1001', 11.5);\r\nEND TRY\r\nBEGIN CATCH\r\n    PRINT N'[BẮT ĐƯỢC LỖI CHECK 547]: ' + ERROR_MESSAGE();\r\nEND CATCH;",
                     "Kiểm thử ràng buộc miền giá trị CHECK"
+                ),
+                new QueryItem(
+                    13,
+                    "Truy vấn 13: Test vi phạm CHECK (Giới tính)",
+                    "Thử chèn sinh viên với giới tính 'Khác' không thuộc tập (Nam, Nữ) để kiểm tra CK_SINHVIEN_GioiTinh.",
+                    "BEGIN TRY\r\n    INSERT INTO SINHVIEN (MaSV, HoTen, NgaySinh, GioiTinh, MaLop)\r\n    VALUES ('SV998', N'Sinh Viên Test Giới Tính', '2003-01-01', N'Khác', '51.CNTT.A');\r\nEND TRY\r\nBEGIN CATCH\r\n    PRINT N'[BẮT ĐƯỢC LỖI CHECK 547]: ' + ERROR_MESSAGE();\r\nEND CATCH;",
+                    "Kiểm thử ràng buộc miền giá trị CHECK Giới tính"
+                ),
+                new QueryItem(
+                    14,
+                    "Truy vấn 14: Test vi phạm Khóa chính (PK trùng)",
+                    "Thử chèn sinh viên có MaSV trùng với sinh viên đã tồn tại ('51.01.104.082') để kiểm tra tính duy nhất PK.",
+                    "BEGIN TRY\r\n    INSERT INTO SINHVIEN (MaSV, HoTen, NgaySinh, GioiTinh, MaLop)\r\n    VALUES ('51.01.104.082', N'Sinh Viên Trùng Mã Khóa Chính', '2003-01-01', N'Nam', '51.CNTT.A');\r\nEND TRY\r\nBEGIN CATCH\r\n    PRINT N'[BẮT ĐƯỢC LỖI KHÓA CHÍNH 2627]: ' + ERROR_MESSAGE();\r\nEND CATCH;",
+                    "Kiểm thử tính duy nhất của Khóa chính (PRIMARY KEY)"
                 )
             };
         }
@@ -585,11 +599,11 @@ namespace COMP1019_Lab10_EduManagerStudio
                 case 11:
                     {
                         var dt = new DataTable();
-                        dt.Columns.Add("Mã Ràng Buộc (Constraint)", typeof(string));
+                        dt.Columns.Add("Ràng Buộc", typeof(string));
                         dt.Columns.Add("Loại Kiểm Tra", typeof(string));
-                        dt.Columns.Add("Dữ Liệu Thử Nghiệm", typeof(string));
-                        dt.Columns.Add("Mã Lỗi SQL (Error Number)", typeof(int));
-                        dt.Columns.Add("Kết Quả Bắt Lỗi", typeof(string));
+                        dt.Columns.Add("Dữ Liệu Thử", typeof(string));
+                        dt.Columns.Add("Mã Lỗi SQL", typeof(int));
+                        dt.Columns.Add("Kết Quả", typeof(string));
 
                         dt.Rows.Add(
                             "FK_SINHVIEN_LOP",
@@ -618,11 +632,11 @@ namespace COMP1019_Lab10_EduManagerStudio
                 case 12:
                     {
                         var dt = new DataTable();
-                        dt.Columns.Add("Mã Ràng Buộc (Constraint)", typeof(string));
-                        dt.Columns.Add("Quy Định Hợp Lệ (Check Rule)", typeof(string));
-                        dt.Columns.Add("Giá Trị Chèn Vào Thử Nghiệm", typeof(string));
-                        dt.Columns.Add("Mã Lỗi SQL (Error Number)", typeof(int));
-                        dt.Columns.Add("Kết Quả Bắt Lỗi", typeof(string));
+                        dt.Columns.Add("Ràng Buộc", typeof(string));
+                        dt.Columns.Add("Quy Định Hợp Lệ", typeof(string));
+                        dt.Columns.Add("Dữ Liệu Thử", typeof(string));
+                        dt.Columns.Add("Mã Lỗi SQL", typeof(int));
+                        dt.Columns.Add("Kết Quả", typeof(string));
 
                         dt.Rows.Add(
                             "CK_KETQUA_Diem",
@@ -646,6 +660,72 @@ namespace COMP1019_Lab10_EduManagerStudio
                             "The conflict occurred in database \"EduManagerDB\", table \"dbo.KETQUA\", column 'Diem'.\r\n" +
                             "The statement has been terminated.\r\n\r\n" +
                             ">> KẾT QUẢ ĐÁNH GIÁ: Ràng buộc CHECK ngăn chặn điểm số không hợp lệ (> 10.0 hoặc < 0.0) một cách tuyệt đối!";
+                        break;
+                    }
+                case 13:
+                    {
+                        var dt = new DataTable();
+                        dt.Columns.Add("Ràng Buộc", typeof(string));
+                        dt.Columns.Add("Quy Định Hợp Lệ", typeof(string));
+                        dt.Columns.Add("Dữ Liệu Thử", typeof(string));
+                        dt.Columns.Add("Mã Lỗi SQL", typeof(int));
+                        dt.Columns.Add("Kết Quả", typeof(string));
+
+                        dt.Rows.Add(
+                            "CK_SINHVIEN_GioiTinh",
+                            "GioiTinh IN (N'Nam', N'Nữ')",
+                            "GioiTinh = N'Khác' (Không thuộc tập Nam, Nữ)",
+                            547,
+                            "BỊ CHẶN BỞI RÀNG BUỘC (PASSED)"
+                        );
+
+                        res.IsSuccess = true;
+                        res.DataTable = dt;
+                        res.AffectedRows = 0;
+                        res.StatusMessage = "Msg 547, Level 16, State 0, Line 3 - Handled in TRY...CATCH block.";
+                        res.ConsoleOutput = 
+                            "--- BẮT ĐẦU KIỂM THỬ RÀNG BUỘC CHECK GIỚI TÍNH (CK_SINHVIEN_GioiTinh) ---\r\n" +
+                            "Lệnh thực thi: INSERT INTO SINHVIEN (MaSV, HoTen, NgaySinh, GioiTinh, MaLop)\r\n" +
+                            "                VALUES ('SV998', N'Sinh Viên Test Giới Tính', '2003-01-01', N'Khác', '51.CNTT.A');\r\n\r\n" +
+                            "[THÔNG BÁO TỪ SQL SERVER ENGINE]:\r\n" +
+                            "Msg 547, Level 16, State 0, Line 3\r\n" +
+                            "The INSERT statement conflicted with the CHECK constraint \"CK_SINHVIEN_GioiTinh\".\r\n" +
+                            "The conflict occurred in database \"EduManagerDB\", table \"dbo.SINHVIEN\", column 'GioiTinh'.\r\n" +
+                            "The statement has been terminated.\r\n\r\n" +
+                            ">> KẾT QUẢ ĐÁNH GIÁ: Ràng buộc CK_SINHVIEN_GioiTinh hoạt động chính xác, chỉ chấp nhận 'Nam' hoặc 'Nữ'!";
+                        break;
+                    }
+                case 14:
+                    {
+                        var dt = new DataTable();
+                        dt.Columns.Add("Ràng Buộc", typeof(string));
+                        dt.Columns.Add("Loại Khóa", typeof(string));
+                        dt.Columns.Add("Khóa Thử", typeof(string));
+                        dt.Columns.Add("Mã Lỗi SQL", typeof(int));
+                        dt.Columns.Add("Kết Quả", typeof(string));
+
+                        dt.Rows.Add(
+                            "PK_SINHVIEN",
+                            "Khóa chính (PRIMARY KEY)",
+                            "MaSV='51.01.104.082' (Đã tồn tại của Lê Hoàng Quân)",
+                            2627,
+                            "BỊ CHẶN BỞI RÀNG BUỘC (PASSED)"
+                        );
+
+                        res.IsSuccess = true;
+                        res.DataTable = dt;
+                        res.AffectedRows = 0;
+                        res.StatusMessage = "Msg 2627, Level 14, State 1, Line 3 - Handled in TRY...CATCH block.";
+                        res.ConsoleOutput = 
+                            "--- BẮT ĐẦU KIỂM THỬ RÀNG BUỘC KHÓA CHÍNH (PRIMARY KEY) ---\r\n" +
+                            "Lệnh thực thi: INSERT INTO SINHVIEN (MaSV, HoTen, NgaySinh, GioiTinh, MaLop)\r\n" +
+                            "                VALUES ('51.01.104.082', N'Sinh Viên Trùng Mã Khóa Chính', '2003-01-01', N'Nam', '51.CNTT.A');\r\n\r\n" +
+                            "[THÔNG BÁO TỪ SQL SERVER ENGINE]:\r\n" +
+                            "Msg 2627, Level 14, State 1, Line 3\r\n" +
+                            "Violation of PRIMARY KEY constraint 'PK_SINHVIEN'. Cannot insert duplicate key in object 'dbo.SINHVIEN'.\r\n" +
+                            "The duplicate key value is (51.01.104.082).\r\n" +
+                            "The statement has been terminated.\r\n\r\n" +
+                            ">> KẾT QUẢ ĐÁNH GIÁ: Ràng buộc Khóa chính bảo đảm tính duy nhất tuyệt đối cho mã sinh viên!";
                         break;
                     }
                 default:

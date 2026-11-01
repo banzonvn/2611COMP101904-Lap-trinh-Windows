@@ -254,9 +254,9 @@ namespace StudentCardPrinter.Forms
                 Padding = new Padding(0, 8, 0, 8)
             };
 
-            btnPreviewPrint.Text = "Xem trước khi in (Print Preview)";
+            btnPreviewPrint.Text = "Xem trước bản in (F4)";
             btnPreviewPrint.Font = new Font("Segoe UI", 9.5f, FontStyle.Bold);
-            btnPreviewPrint.Size = new Size(240, 38);
+            btnPreviewPrint.Size = new Size(210, 38);
             btnPreviewPrint.Location = new Point(0, 8);
             btnPreviewPrint.BackColor = Color.FromArgb(20, 50, 105);
             btnPreviewPrint.ForeColor = Color.White;
@@ -265,7 +265,7 @@ namespace StudentCardPrinter.Forms
             btnPrint.Text = "In thẻ sinh viên";
             btnPrint.Font = new Font("Segoe UI", 9.5f, FontStyle.Bold);
             btnPrint.Size = new Size(160, 38);
-            btnPrint.Location = new Point(250, 8);
+            btnPrint.Location = new Point(220, 8);
             btnPrint.BackColor = Color.FromArgb(24, 110, 60);
             btnPrint.ForeColor = Color.White;
             btnPrint.Cursor = Cursors.Hand;
@@ -273,7 +273,7 @@ namespace StudentCardPrinter.Forms
             btnSavePng.Text = "Xuất file ảnh PNG";
             btnSavePng.Font = new Font("Segoe UI", 9f);
             btnSavePng.Size = new Size(160, 38);
-            btnSavePng.Location = new Point(420, 8);
+            btnSavePng.Location = new Point(390, 8);
             btnSavePng.BackColor = Color.FromArgb(235, 242, 252);
             btnSavePng.ForeColor = Color.FromArgb(20, 50, 105);
             btnSavePng.Cursor = Cursors.Hand;
@@ -380,13 +380,14 @@ namespace StudentCardPrinter.Forms
             cboTheme.SelectedIndex = 0;
 
             // Cấu hình DataGridView
-            dgvStudents.DataSource = studentList;
             dgvStudents.AutoGenerateColumns = false;
-            dgvStudents.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "StudentId", HeaderText = "Mã số SV", Width = 110 });
-            dgvStudents.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "FullName", HeaderText = "Họ và tên", Width = 160 });
-            dgvStudents.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "ClassName", HeaderText = "Lớp", Width = 100 });
-            dgvStudents.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Faculty", HeaderText = "Khoa", Width = 150 });
-            dgvStudents.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Course", HeaderText = "Khóa học", Width = 120 });
+            dgvStudents.Columns.Clear();
+            dgvStudents.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "StudentId", HeaderText = "Mã số SV", Width = 110, MinimumWidth = 90 });
+            dgvStudents.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "FullName", HeaderText = "Họ và tên", Width = 160, MinimumWidth = 130 });
+            dgvStudents.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "ClassName", HeaderText = "Lớp", Width = 100, MinimumWidth = 90 });
+            dgvStudents.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Faculty", HeaderText = "Khoa", Width = 150, MinimumWidth = 120 });
+            dgvStudents.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Course", HeaderText = "Khóa học", Width = 130, MinimumWidth = 100 });
+            dgvStudents.DataSource = studentList;
 
             // Đồng hồ thời gian thực
             timerClock.Interval = 1000;
