@@ -65,7 +65,7 @@ namespace COMP1019_Buoi11_Lab11
         {
             this.Text = "Quản lý Lớp học - ADO.NET & SQL Server | COMP1019 Lab 11 - Lê Hoàng Quân (51.01.104.082)";
             this.Size = new Size(1280, 800);
-            this.MinimumSize = new Size(1050, 680);
+            this.MinimumSize = new Size(1080, 700);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Font = new Font("Segoe UI", 9.5f, FontStyle.Regular);
             this.BackColor = Color.FromArgb(248, 250, 252);
@@ -85,7 +85,8 @@ namespace COMP1019_Buoi11_Lab11
                 ForeColor = Color.White,
                 Font = new Font("Segoe UI", 13.5f, FontStyle.Bold),
                 Location = new Point(20, 14),
-                AutoSize = true
+                AutoSize = true,
+                UseMnemonic = false
             };
 
             _lblHeaderSub = new Label
@@ -94,7 +95,8 @@ namespace COMP1019_Buoi11_Lab11
                 ForeColor = Color.FromArgb(148, 163, 184),
                 Font = new Font("Segoe UI", 9.2f),
                 Location = new Point(22, 45),
-                AutoSize = true
+                AutoSize = true,
+                UseMnemonic = false
             };
 
             _lblStudentBadge = new Label
@@ -103,10 +105,10 @@ namespace COMP1019_Buoi11_Lab11
                 ForeColor = Color.FromArgb(56, 189, 248),
                 BackColor = Color.FromArgb(30, 41, 59),
                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
-                Location = new Point(780, 16),
+                Location = new Point(780, 14),
                 Padding = new Padding(10, 6, 10, 6),
                 AutoSize = true,
-                Anchor = AnchorStyles.Top | AnchorStyles.Right
+                UseMnemonic = false
             };
 
             _btnTestConn = new Button
@@ -117,13 +119,13 @@ namespace COMP1019_Buoi11_Lab11
                 FlatStyle = FlatStyle.Flat,
                 Font = new Font("Segoe UI", 9.0f, FontStyle.Bold),
                 Location = new Point(780, 48),
-                Size = new Size(160, 28),
-                Cursor = Cursors.Hand,
-                Anchor = AnchorStyles.Top | AnchorStyles.Right
+                Size = new Size(185, 28),
+                Cursor = Cursors.Hand
             };
             _btnTestConn.FlatAppearance.BorderSize = 0;
             _btnTestConn.Click += (s, e) => CheckConnectionLive();
 
+            _pnlHeader.Resize += (s, e) => UpdateHeaderLayout();
             _pnlHeader.Controls.AddRange(new Control[] { _lblHeaderTitle, _lblHeaderSub, _lblStudentBadge, _btnTestConn });
 
             // 2. Status Strip
@@ -160,8 +162,8 @@ namespace COMP1019_Buoi11_Lab11
             var pnlInputForm = new Panel
             {
                 Dock = DockStyle.Top,
-                Height = 220,
-                Padding = new Padding(0, 10, 0, 10)
+                Height = 205,
+                Padding = new Padding(0, 8, 0, 8)
             };
 
             lblMaLop = new Label
@@ -169,14 +171,14 @@ namespace COMP1019_Buoi11_Lab11
                 Text = "Mã lớp (*):",
                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(51, 65, 85),
-                Location = new Point(0, 12),
+                Location = new Point(0, 10),
                 AutoSize = true
             };
 
             txtMaLop = new TextBox
             {
-                Location = new Point(0, 36),
-                Size = new Size(340, 29),
+                Location = new Point(0, 34),
+                Size = new Size(340, 28),
                 Font = new Font("Segoe UI", 10.0f)
             };
 
@@ -185,24 +187,24 @@ namespace COMP1019_Buoi11_Lab11
                 Text = "Tên lớp học (*):",
                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(51, 65, 85),
-                Location = new Point(0, 78),
+                Location = new Point(0, 74),
                 AutoSize = true
             };
 
             txtTenLop = new TextBox
             {
-                Location = new Point(0, 102),
-                Size = new Size(340, 29),
+                Location = new Point(0, 98),
+                Size = new Size(340, 28),
                 Font = new Font("Segoe UI", 10.0f)
             };
 
             var lblNote = new Label
             {
-                Text = "(*) Lưu ý: Mã lớp là khóa chính, không được trùng lặp và không được sửa sau khi chọn dòng.",
+                Text = "(*) Lưu ý: Mã lớp là khóa chính, không trùng lặp và không thể sửa sau khi chọn dòng.",
                 ForeColor = Color.FromArgb(100, 116, 139),
                 Font = new Font("Segoe UI", 8.5f, FontStyle.Italic),
-                Location = new Point(0, 142),
-                Size = new Size(340, 60)
+                Location = new Point(0, 136),
+                Size = new Size(340, 56)
             };
 
             pnlInputForm.Controls.AddRange(new Control[] { lblMaLop, txtMaLop, lblTenLop, txtTenLop, lblNote });
@@ -211,18 +213,18 @@ namespace COMP1019_Buoi11_Lab11
             var pnlButtons = new Panel
             {
                 Dock = DockStyle.Top,
-                Height = 120
+                Height = 100
             };
 
             btnThem = new Button
             {
-                Text = "✚ Thêm Lớp",
+                Text = "+ Thêm Lớp",
                 BackColor = Color.FromArgb(16, 185, 129), // Emerald Green
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
-                Location = new Point(0, 10),
-                Size = new Size(165, 38),
+                Location = new Point(0, 6),
+                Size = new Size(162, 38),
                 Cursor = Cursors.Hand
             };
             btnThem.FlatAppearance.BorderSize = 0;
@@ -235,8 +237,8 @@ namespace COMP1019_Buoi11_Lab11
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
-                Location = new Point(175, 10),
-                Size = new Size(165, 38),
+                Location = new Point(178, 6),
+                Size = new Size(162, 38),
                 Cursor = Cursors.Hand
             };
             btnSua.FlatAppearance.BorderSize = 0;
@@ -244,13 +246,13 @@ namespace COMP1019_Buoi11_Lab11
 
             btnXoa = new Button
             {
-                Text = "✖ Xóa Lớp",
+                Text = "✕ Xóa Lớp",
                 BackColor = Color.FromArgb(239, 68, 68), // Rose Red
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
-                Location = new Point(0, 58),
-                Size = new Size(165, 38),
+                Location = new Point(0, 52),
+                Size = new Size(162, 38),
                 Cursor = Cursors.Hand
             };
             btnXoa.FlatAppearance.BorderSize = 0;
@@ -258,13 +260,13 @@ namespace COMP1019_Buoi11_Lab11
 
             btnLamMoi = new Button
             {
-                Text = "⟲ Làm Mới",
+                Text = "↻ Làm Mới",
                 BackColor = Color.FromArgb(100, 116, 139), // Slate
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
-                Location = new Point(175, 58),
-                Size = new Size(165, 38),
+                Location = new Point(178, 52),
+                Size = new Size(162, 38),
                 Cursor = Cursors.Hand
             };
             btnLamMoi.FlatAppearance.BorderSize = 0;
@@ -276,16 +278,17 @@ namespace COMP1019_Buoi11_Lab11
             var rtbInstructions = new RichTextBox
             {
                 Dock = DockStyle.Fill,
-                Font = new Font("Segoe UI", 9.0f),
+                Font = new Font("Segoe UI", 8.8f),
                 BackColor = Color.FromArgb(248, 250, 252),
                 ForeColor = Color.FromArgb(51, 65, 85),
                 BorderStyle = BorderStyle.None,
                 ReadOnly = true,
+                ScrollBars = RichTextBoxScrollBars.None,
                 Text = "HƯỚNG DẪN THAO TÁC (LAB 11):\n\n" +
-                       "• Thêm lớp: Nhập Mã và Tên lớp -> Nhấn [Thêm Lớp]. Hệ thống dùng ExecuteScalar kiểm tra trùng mã trước khi INSERT.\n\n" +
-                       "• Sửa lớp: Nhấp chuột vào 1 dòng trong bảng -> Đổi tên lớp -> Nhấn [Cập Nhật].\n\n" +
-                       "• Xóa lớp: Chọn dòng cần xóa -> Nhấn [Xóa Lớp]. Nếu lớp đang có sinh viên, hệ thống sẽ CHẶN XÓA để bảo vệ toàn vẹn khóa ngoại (FK_SINHVIEN_LOP)!\n\n" +
-                       "• Tìm kiếm: Nhập từ khóa (mã hoặc tên) -> Nhấn [Tìm kiếm] hoặc Enter."
+                       "• Thêm: Nhập Mã + Tên -> Nhấn [+ Thêm Lớp] (dùng ExecuteScalar kiểm tra trùng khóa chính).\n" +
+                       "• Sửa: Chọn 1 dòng trong bảng -> Đổi tên lớp -> Nhấn [✎ Cập Nhật].\n" +
+                       "• Xóa: Chọn dòng cần xóa -> Nhấn [✕ Xóa Lớp]. Lớp có sinh viên sẽ bị chặn bởi FK_SINHVIEN_LOP.\n" +
+                       "• Tìm kiếm: Nhập từ khóa (mã hoặc tên) -> Nhấn [🔍 Tìm kiếm] hoặc gõ phím Enter."
             };
 
             _pnlLeftInput.Controls.Add(rtbInstructions);
@@ -304,26 +307,27 @@ namespace COMP1019_Buoi11_Lab11
             _pnlAlert = new Panel
             {
                 Dock = DockStyle.Top,
-                Height = 44,
+                Height = 52,
                 BackColor = Color.FromArgb(220, 252, 231),
                 Visible = false,
-                Padding = new Padding(10, 8, 10, 8)
+                Padding = new Padding(12, 8, 12, 8)
             };
 
             _lblAlertIcon = new Label
             {
                 Text = "✔",
-                Font = new Font("Segoe UI", 11.0f, FontStyle.Bold),
-                Location = new Point(10, 10),
+                Font = new Font("Segoe UI", 12.0f, FontStyle.Bold),
+                Location = new Point(12, 10),
                 AutoSize = true
             };
 
             _lblAlertText = new Label
             {
                 Text = "Thông báo",
-                Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
-                Location = new Point(36, 12),
-                AutoSize = true
+                Font = new Font("Segoe UI", 9.2f, FontStyle.Bold),
+                Location = new Point(38, 10),
+                AutoSize = true,
+                MaximumSize = new Size(820, 34)
             };
 
             _pnlAlert.Controls.AddRange(new Control[] { _lblAlertIcon, _lblAlertText });
@@ -332,7 +336,7 @@ namespace COMP1019_Buoi11_Lab11
             var pnlSearch = new Panel
             {
                 Dock = DockStyle.Top,
-                Height = 50,
+                Height = 52,
                 BackColor = Color.White,
                 Padding = new Padding(12, 10, 12, 10)
             };
@@ -342,14 +346,15 @@ namespace COMP1019_Buoi11_Lab11
                 Text = "Tìm kiếm lớp học:",
                 Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(15, 23, 42),
-                Location = new Point(12, 14),
-                AutoSize = true
+                Location = new Point(14, 15),
+                AutoSize = true,
+                UseMnemonic = false
             };
 
             txtTimKiem = new TextBox
             {
-                Location = new Point(145, 11),
-                Size = new Size(320, 29),
+                Location = new Point(175, 11),
+                Size = new Size(245, 28),
                 Font = new Font("Segoe UI", 9.8f),
                 PlaceholderText = "Nhập mã lớp hoặc tên lớp cần tìm..."
             };
@@ -369,8 +374,8 @@ namespace COMP1019_Buoi11_Lab11
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
                 Font = new Font("Segoe UI", 9.2f, FontStyle.Bold),
-                Location = new Point(475, 10),
-                Size = new Size(110, 30),
+                Location = new Point(430, 10),
+                Size = new Size(130, 30),
                 Cursor = Cursors.Hand
             };
             btnTimKiem.FlatAppearance.BorderSize = 0;
@@ -383,7 +388,7 @@ namespace COMP1019_Buoi11_Lab11
                 ForeColor = Color.FromArgb(15, 23, 42),
                 FlatStyle = FlatStyle.Flat,
                 Font = new Font("Segoe UI", 9.0f),
-                Location = new Point(595, 10),
+                Location = new Point(570, 10),
                 Size = new Size(95, 30),
                 Cursor = Cursors.Hand
             };
@@ -407,7 +412,7 @@ namespace COMP1019_Buoi11_Lab11
             dgvLop = new DataGridView
             {
                 Dock = DockStyle.Top,
-                Height = 310,
+                Height = 290,
                 BackgroundColor = Color.White,
                 BorderStyle = BorderStyle.None,
                 RowHeadersVisible = false,
@@ -437,7 +442,7 @@ namespace COMP1019_Buoi11_Lab11
             {
                 BackColor = Color.FromArgb(248, 250, 252)
             };
-            dgvLop.RowTemplate.Height = 34;
+            dgvLop.RowTemplate.Height = 32;
             dgvLop.CellClick += dgvLop_CellClick;
 
             var splitterDetail = new Splitter { Dock = DockStyle.Top, Height = 6, BackColor = Color.FromArgb(226, 232, 240) };
@@ -448,8 +453,8 @@ namespace COMP1019_Buoi11_Lab11
                 Font = new Font("Segoe UI", 9.5f)
             };
 
-            _tabStudents = new TabPage("Danh Sách Sinh Viên Thuộc Lớp (Khóa Ngoại FK_SINHVIEN_LOP)");
-            _tabSqlLog = new TabPage("Nhật Ký Thực Thi Câu Lệnh SQL (Parameterized Command Live Monitor)");
+            _tabStudents = new TabPage("Sinh Viên Thuộc Lớp (Khóa Ngoại FK)");
+            _tabSqlLog = new TabPage("Nhật Ký ADO.NET (SQL Parameterized)");
 
             // Detail Students Grid
             _dgvStudents = new DataGridView
@@ -512,6 +517,18 @@ namespace COMP1019_Buoi11_Lab11
             this.Load += FrmLop_Load;
         }
 
+        private void UpdateHeaderLayout()
+        {
+            if (_lblStudentBadge != null && _btnTestConn != null && _pnlHeader != null)
+            {
+                int rightX = _pnlHeader.ClientSize.Width - 20;
+                _lblStudentBadge.Left = Math.Max(20, rightX - _lblStudentBadge.Width);
+                _lblStudentBadge.Top = 14;
+                _btnTestConn.Left = Math.Max(20, rightX - _btnTestConn.Width);
+                _btnTestConn.Top = 48;
+            }
+        }
+
         private void PnlHeader_Paint(object? sender, PaintEventArgs e)
         {
             using var brush = new LinearGradientBrush(_pnlHeader.ClientRectangle,
@@ -521,6 +538,7 @@ namespace COMP1019_Buoi11_Lab11
 
         private void FrmLop_Load(object? sender, EventArgs e)
         {
+            UpdateHeaderLayout();
             CheckConnectionLive();
             LoadData();
         }
@@ -540,6 +558,7 @@ namespace COMP1019_Buoi11_Lab11
                 _tslEngine.ForeColor = Color.FromArgb(180, 83, 9);
                 ShowAlert("Đang chạy ở chế độ In-Memory Fallback Engine (Tương thích chuẩn lược đồ SQL Server).", AlertType.Info);
             }
+            UpdateHeaderLayout();
         }
 
         public void ShowAlert(string message, AlertType type)
@@ -723,8 +742,7 @@ namespace COMP1019_Buoi11_Lab11
                 if (soSinhVien > 0)
                 {
                     Notify(
-                        $"Không thể xóa lớp '{ma}' vì đang có {soSinhVien} sinh viên theo học!\n\n" +
-                        "Quy tắc toàn vẹn: Ràng buộc khóa ngoại FK_SINHVIEN_LOP ngăn chặn xóa lớp khi vẫn còn dữ liệu sinh viên tham chiếu.",
+                        $"Không thể xóa lớp '{ma}' vì đang có {soSinhVien} sinh viên! Ràng buộc FK_SINHVIEN_LOP bảo vệ dữ liệu.",
                         "Từ chối xóa - Vi phạm khóa ngoại",
                         MessageBoxIcon.Stop,
                         AlertType.Error);
@@ -767,7 +785,7 @@ namespace COMP1019_Buoi11_Lab11
         {
             ClearInput();
             LoadData();
-            _tabStudents.Text = "Danh Sách Sinh Viên Thuộc Lớp (Khóa Ngoại FK_SINHVIEN_LOP)";
+            _tabStudents.Text = "Sinh Viên Thuộc Lớp (Khóa Ngoại FK)";
             _dgvStudents.DataSource = null;
             ShowAlert("Đã làm mới form và nạp lại toàn bộ dữ liệu từ CSDL.", AlertType.Info);
         }
@@ -791,6 +809,21 @@ namespace COMP1019_Buoi11_Lab11
             _tabStudents.Text = $"Sinh Viên Lớp {maLop} ({dtStudents.Rows.Count} bạn)";
 
             ShowAlert($"Đang chọn lớp: {maLop} - {tenLop} (Hiện có {dtStudents.Rows.Count} sinh viên).", AlertType.Info);
+        }
+
+        public bool SelectRowByMaLop(string maLop)
+        {
+            for (int i = 0; i < dgvLop.Rows.Count; i++)
+            {
+                if (string.Equals(dgvLop.Rows[i].Cells["MaLop"].Value?.ToString(), maLop, StringComparison.OrdinalIgnoreCase))
+                {
+                    dgvLop.ClearSelection();
+                    dgvLop.Rows[i].Selected = true;
+                    dgvLop_CellClick(dgvLop, new DataGridViewCellEventArgs(0, i));
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void ClearInput()
@@ -841,6 +874,8 @@ namespace COMP1019_Buoi11_Lab11
 
         public void CaptureView(string savePath)
         {
+            Application.DoEvents();
+            UpdateHeaderLayout();
             Application.DoEvents();
             using var bmp = new Bitmap(this.Width, this.Height);
             this.DrawToBitmap(bmp, new Rectangle(0, 0, this.Width, this.Height));

@@ -33,7 +33,7 @@ namespace COMP1019_Buoi11_Lab11
             Directory.CreateDirectory(parentLabImagesDir);
 
             using var form = new FrmLop();
-            form.SuppressMessageBox = true; // Avoid modal popups during capture
+            form.SuppressMessageBox = true; // Avoid modal popups during automated capture
             form.Show();
             Application.DoEvents();
             Thread.Sleep(300);
@@ -55,11 +55,7 @@ namespace COMP1019_Buoi11_Lab11
             SaveStep("01_khoi_chay_va_load_du_lieu.png");
 
             // Step 2: Select Row CNTT01 (Has 3 students)
-            if (form.dgvLop.Rows.Count > 0)
-            {
-                form.dgvLop.Rows[0].Selected = true;
-                form.dgvLop_CellClick(form.dgvLop, new DataGridViewCellEventArgs(0, 0));
-            }
+            form.SelectRowByMaLop("CNTT01");
             form.SelectTab(0);
             Application.DoEvents();
             SaveStep("02_chon_dong_do_du_lieu_len_form.png");
@@ -67,7 +63,7 @@ namespace COMP1019_Buoi11_Lab11
             // Step 3: Insert valid new class
             form.ClearInput();
             form.txtMaLop.Text = "51.CNTT.CLC";
-            form.txtTenLop.Text = "Cử nhân CNTT Khóa 51 Chất Lượng Cao";
+            form.txtTenLop.Text = "Cử nhân CNTT Khóa 51 CLC";
             Application.DoEvents();
             form.btnThem_Click(form.btnThem, EventArgs.Empty);
             Application.DoEvents();
@@ -91,14 +87,10 @@ namespace COMP1019_Buoi11_Lab11
             Application.DoEvents();
             SaveStep("05_validation_trung_ma_lop.png");
 
-            // Step 6: Edit class
+            // Step 6: Edit class (SPTOAN)
             form.ClearInput();
-            if (form.dgvLop.Rows.Count > 3)
-            {
-                form.dgvLop.Rows[3].Selected = true;
-                form.dgvLop_CellClick(form.dgvLop, new DataGridViewCellEventArgs(0, 3));
-            }
-            form.txtTenLop.Text = "Sư phạm Toán học 01 (Lớp Nâng Cao)";
+            form.SelectRowByMaLop("SPTOAN");
+            form.txtTenLop.Text = "Sư phạm Toán học (K51 - Đã cập nhật)";
             Application.DoEvents();
             form.btnSua_Click(form.btnSua, EventArgs.Empty);
             Application.DoEvents();
@@ -111,24 +103,15 @@ namespace COMP1019_Buoi11_Lab11
             Application.DoEvents();
             SaveStep("07_validation_sua_khi_chua_chon.png");
 
-            // Step 8: Delete empty class
-            // Select SPTOAN (0 students)
-            if (form.dgvLop.Rows.Count > 3)
-            {
-                form.dgvLop.Rows[3].Selected = true;
-                form.dgvLop_CellClick(form.dgvLop, new DataGridViewCellEventArgs(0, 3));
-            }
+            // Step 8: Delete empty class (51.CNTT.CLC with 0 students)
+            form.SelectRowByMaLop("51.CNTT.CLC");
             Application.DoEvents();
             form.btnXoa_Click(form.btnXoa, EventArgs.Empty);
             Application.DoEvents();
             SaveStep("08_xoa_lop_chua_co_sinh_vien.png");
 
-            // Step 9: Block delete class with students (CNTT01)
-            if (form.dgvLop.Rows.Count > 0)
-            {
-                form.dgvLop.Rows[0].Selected = true;
-                form.dgvLop_CellClick(form.dgvLop, new DataGridViewCellEventArgs(0, 0));
-            }
+            // Step 9: Block delete class with students (CNTT01 with 3 students)
+            form.SelectRowByMaLop("CNTT01");
             Application.DoEvents();
             form.btnXoa_Click(form.btnXoa, EventArgs.Empty);
             Application.DoEvents();
@@ -136,11 +119,12 @@ namespace COMP1019_Buoi11_Lab11
 
             // Step 10: Search by keyword "CNTT"
             form.txtTimKiem.Text = "CNTT";
+            Application.DoEvents();
             form.btnTimKiem_Click(form.btnTimKiem, EventArgs.Empty);
             Application.DoEvents();
             SaveStep("10_tim_kiem_lop_theo_tu_khoa.png");
 
-            // Step 11: Reset form
+            // Step 11: Reset form to initial state
             form.btnLamMoi_Click(form.btnLamMoi, EventArgs.Empty);
             Application.DoEvents();
             SaveStep("11_lam_moi_form_ve_ban_dau.png");
