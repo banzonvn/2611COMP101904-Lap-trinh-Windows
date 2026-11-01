@@ -10,92 +10,6 @@
 
 ---
 
-## 1. Mục tiêu bài lab
-
-1. Sử dụng thành thạo điều khiển `PictureBox` và hộp thoại `OpenFileDialog` để chọn và hiển thị ảnh đại diện với chế độ `SizeMode = Zoom`.
-2. Nạp ảnh an toàn (`LoadImageSafe`), tránh triệt để lỗi khóa file ảnh gốc (File Lock) trên hệ điều hành và giải phóng ảnh cũ bằng `Dispose()`.
-3. Tách biệt kiến trúc dữ liệu (`StudentCardInfo`), logic vẽ (`StudentCardRenderer`) và giao diện (`FrmStudentCard`).
-4. Vẽ thẻ sinh viên bằng kỹ thuật GDI+ trên `Panel` (có `DoubleBuffered = true` chống nhấp nháy), đảm bảo ảnh thẻ không bị méo (`DrawImageZoom`).
-5. Sử dụng bộ thành phần in ấn Windows Forms: `PrintDocument`, `PrintPreviewDialog`, `PrintDialog` để xem trước và in thẻ chuẩn xác.
-6. Thiết lập quy tắc kiểm tra tính hợp lệ dữ liệu đầu vào (Validation) trước khi cho phép xem trước hoặc in thẻ.
-
----
-
-## 2. Điểm khác biệt & Kiến trúc Code nổi bật
-
-Để code đạt chuẩn công nghiệp, không bị rập khuôn hay trùng lặp với cách giải thông thường của AI và các bạn sinh viên khác, bài làm được tổ chức theo các nguyên lý công nghệ phần mềm:
-
-### 2.1. Tách riêng lớp vẽ thẻ `StudentCardRenderer` (Single Responsibility Principle)
-Hầu hết sinh viên sẽ viết toàn bộ code vẽ thẻ vào trong Form chính (`FrmStudentCard.cs`), khiến file Form bị phình to và khó tái sử dụng. Dự án này tách riêng một lớp dịch vụ tĩnh `StudentCardRenderer`:
-- Dùng chung **duy nhất một logic vẽ** cho cả:
-  - Bản xem trước thẻ trên Form (`pnlCardPreview_Paint`).
-  - Bản in trên giấy A4 hoặc máy in thẻ (`printDocument1_PrintPage`).
-  - Chức năng xuất thẻ ra file ảnh PNG độ nét cao (`btnSavePng_Click`).
-- Giúp bản in và bản preview luôn nhất quán 100%, dễ bảo trì và dễ mở rộng.
-
-### 2.2. Xử lý ảnh an toàn chống khóa file (Anti-File Lock)
-Thay vì sử dụng `Image.FromFile()` trực tiếp làm khóa file ảnh trên đĩa cứng:
-```csharp
-using Image temp = Image.FromFile(filePath);
-Bitmap copy = new Bitmap(temp);
-picAvatar.Image?.Dispose();
-picAvatar.Image = copy;
-```
-Phương thức này giải phóng file gốc ngay lập tức, cho phép người dùng thoải mái đổi tên, di chuyển hoặc chọn lại file ảnh mà không bị hệ điều hành báo lỗi `"The process cannot access the file because it is being used by another process"`.
-
-### 2.3. Vẽ ảnh giữ nguyên tỉ lệ không méo (`DrawImageZoom`)
-Mô phỏng cơ chế `PictureBoxSizeMode.Zoom` trực tiếp trên đối tượng `Graphics` thông qua việc tính toán tỉ số co giãn tối ưu giữa chiều dài và chiều rộng:
-```csharp
-float ratio = Math.Min((float)box.Width / image.Width, (float)box.Height / image.Height);
-int w = (int)(image.Width * ratio);
-int h = (int)(image.Height * ratio);
-int x = box.Left + (box.Width - w) / 2;
-int y = box.Top + (box.Height - h) / 2;
-g.DrawImage(image, new Rectangle(x, y, w, h));
-```
-
-### 2.4. Đăng ký sự kiện In ấn chuẩn xác
-Theo tài liệu lý thuyết, sự kiện `PrintDocument.PrintPage` tuyệt đối không được gắn lặp đi lặp lại trong nút bấm xem trước vì sẽ làm lặp nội dung in. Sự kiện này được gắn duy nhất một lần trong quá trình khởi tạo Form.
-
-### 2.5. Các tính năng độc đáo mở rộng
-- **Tùy biến phong cách thẻ (Card Themes):** Hỗ trợ nhiều bộ phối màu sang trọng: HCMUE Xanh Navy truyền thống, Emerald Green, Burgundy Red, Amber Gold.
-- **Thẻ sinh viên thông minh (Smart Card):** Tự động vẽ mô phỏng chip vi mạch điện tử và mã QR ma trận GDI+ chứa thông tin mã hóa sinh viên.
-- **Quản lý danh sách sinh viên tạm thời:** Cho phép lưu nhiều sinh viên vào `BindingList<StudentCardInfo>` hiển thị trên `DataGridView`, click chọn sinh viên nào là thẻ tự động nạp sinh viên đó.
-
----
-
-## 3. Danh sách Điều khiển (Controls) trên Giao diện
-
-| Nhóm chức năng | Loại Control | Tên Control (`Name`) | Chức năng / Mô tả chi tiết |
-| :--- | :---: | :---: | :--- |
-| **Thông tin sinh viên** | `TextBox` | `txtStudentId` | Nhập Mã số sinh viên (Bắt buộc) |
-| | `TextBox` | `txtFullName` | Nhập Họ và tên sinh viên (Bắt buộc) |
-| | `ComboBox` | `cboClass` | Chọn lớp học (K49.CNTT.A, K50.CNTT.A, K51.CNTT.A, ...) |
-| | `ComboBox` | `cboFaculty` | Chọn khoa đào tạo (Công nghệ thông tin, Toán - Tin học, ...) |
-| | `TextBox` | `txtCourse` | Nhập niên khóa đào tạo (K50 2024 - 2028) |
-| | `DateTimePicker` | `dtpBirthDate` | Chọn ngày tháng năm sinh (định dạng `dd/MM/yyyy`) |
-| | `ComboBox` | `cboGender` | Chọn giới tính (Nam, Nữ, Khác) |
-| **Ảnh đại diện** | `PictureBox` | `picAvatar` | Hiển thị ảnh chân dung sinh viên (`SizeMode = Zoom`) |
-| | `Button` | `btnChoosePhoto` | Mở hộp thoại `OpenFileDialog` nạp ảnh thẻ |
-| | `Button` | `btnSampleData` | Nạp dữ liệu sinh viên mẫu 1-click |
-| | `Button` | `btnClear` | Làm mới Form, xóa trắng thông tin và ảnh |
-| **Tùy biến thẻ** | `ComboBox` | `cboTheme` | Lựa chọn bộ màu giao diện thẻ sinh viên |
-| | `Button` | `btnCustomBg` | Mở `ColorDialog` đổi màu nền thẻ tùy thích |
-| | `CheckBox` | `chkShowQr` | Bật/tắt hiển thị mã QR Code bảo an |
-| | `CheckBox` | `chkShowChip` | Bật/tắt mô phỏng vi mạch chip thông minh |
-| | `Button` | `btnSaveStudent` | Thêm thẻ sinh viên hiện tại vào danh sách tạm |
-| **Xem trước thẻ** | `DoubleBufferedPanel` | `pnlCardPreview` | Vùng vẽ xem trước thẻ sinh viên bằng GDI+ |
-| **Thao tác in ấn** | `Button` | `btnPreviewPrint` | Mở hộp thoại xem trước bản in `PrintPreviewDialog` |
-| | `Button` | `btnPrint` | Mở `PrintDialog` và gửi lệnh in ra máy in thực hoặc PDF |
-| | `Button` | `btnSavePng` | Xuất thẻ sinh viên ra file ảnh PNG chất lượng cao |
-| **Quản lý danh sách**| `DataGridView` | `dgvStudents` | Hiển thị danh sách các thẻ sinh viên đã lưu |
-| **Thành phần in** | `PrintDocument` | `printDocument1` | Định nghĩa nội dung bản in trên trang giấy |
-| | `PrintPreviewDialog` | `printPreviewDialog1` | Cửa sổ xem trước trang in A4 |
-| | `PrintDialog` | `printDialog1` | Cửa sổ thiết lập thông số máy in |
-| **Thanh trạng thái** | `StatusStrip` | `statusStrip1` | Hiển thị thông báo trạng thái và đồng hồ thời gian thực |
-
----
-
 ## 4. Chi tiết các chức năng & Ảnh chụp màn hình minh họa
 
 ### 4.1. Khởi tạo & Giao diện tổng quan ứng dụng
@@ -141,10 +55,11 @@ _Mô tả: Thẻ sinh viên được kết xuất hoàn chỉnh với bố cục
 ### 4.5. Kiểm tra tính hợp lệ dữ liệu (Validation bắt buộc)
 
 Ứng dụng cài đặt cơ chế kiểm tra dữ liệu đầu vào nghiêm ngặt trước khi cho phép in hoặc xem trước:
+
 - Mã số sinh viên không được để trống.
 - Họ và tên sinh viên không được để trống.
 - Bắt buộc phải có ảnh chân dung sinh viên.
-Khi thiếu thông tin, hệ thống hiển thị hộp thoại cảnh báo và tự động chuyển con trỏ chuột `Focus()` về trường dữ liệu còn thiếu.
+  Khi thiếu thông tin, hệ thống hiển thị hộp thoại cảnh báo và tự động chuyển con trỏ chuột `Focus()` về trường dữ liệu còn thiếu.
 
 ![Thông báo Validation](images/05_thong_bao_validation_thieu_du_lieu.png)
 
@@ -222,24 +137,7 @@ _Mô tả: Form sau khi nhấn nút Làm mới để xóa dữ liệu về trạ
 
 ---
 
-## 5. Bảng kiểm thử 8 Test Case tự thực hiện (Theo yêu cầu đề bài)
-
-| Mã TC | Chức năng kiểm thử | Các bước thực hiện | Dữ liệu đầu vào | Kết quả kỳ vọng | Kết quả thực tế | Đánh giá |
-| :---: | :--- | :--- | :--- | :--- | :--- | :---: |
-| **TC01** | Khởi chạy và nạp form | Mở ứng dụng từ Visual Studio hoặc dòng lệnh | Không có | Form hiển thị đầy đủ 2 cột, ComboBox có sẵn danh sách lớp và khoa mẫu | Giao diện hiển thị đúng chuẩn, đồng hồ status bar chạy từng giây | **ĐẠT** |
-| **TC02** | Chọn ảnh đại diện hợp lệ | Nhấn nút "Chọn ảnh...", chọn file ảnh `.png` hoặc `.jpg` | File ảnh chân dung `avatar.jpg` (kích thước bất kỳ) | Ảnh hiển thị trong `picAvatar` chế độ Zoom không méo; thẻ preview tự nạp ảnh | Ảnh hiển thị rõ ràng, không bị méo, không bị giữ khóa file | **ĐẠT** |
-| **TC03** | Chọn file không phải ảnh | Nhấn nút "Chọn ảnh...", chọn một file `.txt` hoặc file bị hỏng | File `document.txt` | Hệ thống bắt ngoại lệ và hiển thị MessageBox thông báo lỗi file không hợp lệ | Hiện thông báo lỗi nạp ảnh, ứng dụng không bị crash | **ĐẠT** |
-| **TC04** | Validation để trống MSSV | Xóa trắng ô MSSV, nhấn nút "Xem trước in" | MSSV: `""`, Họ tên: `"Lê Hoàng Quân"`, có ảnh | Xuất hiện MessageBox cảnh báo yêu cầu nhập MSSV, con trỏ focus vào ô MSSV | Cảnh báo xuất hiện đúng, không mở PrintPreviewDialog | **ĐẠT** |
-| **TC05** | Validation để trống Họ tên | Nhập MSSV hợp lệ, xóa trắng ô Họ tên, nhấn nút "In thẻ" | MSSV: `"51.01.104.082"`, Họ tên: `""`, có ảnh | Xuất hiện MessageBox cảnh báo yêu cầu nhập họ tên, con trỏ focus vào ô Họ tên | Cảnh báo xuất hiện đúng, không kích hoạt in | **ĐẠT** |
-| **TC06** | Validation chưa chọn ảnh | Nhập đầy đủ MSSV và Họ tên, nhưng chưa chọn ảnh đại diện | MSSV: `"51.01.104.082"`, Họ tên: `"Lê Hoàng Quân"`, Ảnh: `null` | Xuất hiện MessageBox yêu cầu chọn ảnh thẻ đại diện sinh viên | Hiện cảnh báo, ngăn chặn in thẻ khi thiếu ảnh | **ĐẠT** |
-| **TC07** | Xem trước in (Print Preview) | Nhập đủ thông tin hợp lệ, chọn ảnh, nhấn "Xem trước in" | Dữ liệu sinh viên đầy đủ | `PrintPreviewDialog` mở ra, thẻ nằm đúng lề trên trang A4, text và ảnh sắc nét | Bản in thẻ chuẩn xác, không bị in lặp nội dung khi mở nhiều lần | **ĐẠT** |
-| **TC08** | In ra máy in ảo PDF | Nhấn "In thẻ", chọn máy in `Microsoft Print to PDF` | Dữ liệu sinh viên đầy đủ | Hộp thoại Save PDF mở ra, xuất ra file PDF chứa thẻ sinh viên hoàn chỉnh | File PDF tạo thành công, mở lên xem rõ nét giống hệt preview | **ĐẠT** |
-| **TC09** | Tùy biến Theme & Xuất PNG | Chọn theme "Emerald Green", đổi màu nền, nhấn "Xuất file ảnh (PNG)" | Theme: Emerald, Nền: Mint | File PNG được tạo với độ phân giải cao 1080x680, có chip và mã QR | File PNG xuất sắc nét, màu sắc đúng theo theme đã chọn | **ĐẠT** |
-| **TC10** | Làm mới dữ liệu Form | Nhập thông tin và ảnh, sau đó nhấn nút "Làm mới" | Dữ liệu đang có trên form | Toàn bộ TextBox bị xóa trắng, ảnh bị giải phóng, thẻ preview trở về placeholder | Form xóa sạch dữ liệu, con trỏ focus về ô MSSV | **ĐẠT** |
-
----
-
-## 6. Cấu trúc thư mục mã nguồn
+## .5 Cấu trúc thư mục mã nguồn
 
 ```
 Lab09/
@@ -259,7 +157,3 @@ Lab09/
     ├── images/                         ← Chứa 12 ảnh chụp màn hình minh họa cho từng chức năng
     └── README.md                       ← Báo cáo chi tiết bài tập Lab 09
 ```
-
----
-
-*COMP1019 - Lập trình trên Windows | ThS. Lê Thanh Thoại - HCMUE*

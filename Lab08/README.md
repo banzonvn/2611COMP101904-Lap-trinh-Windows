@@ -10,82 +10,7 @@
 
 ---
 
-## 1. Mục tiêu bài lab
-
-1. Sử dụng thành thạo đối tượng `Graphics`, `Pen`, `Brush`, `Font` và sự kiện `Paint` trong Windows Forms.
-2. Xử lý chuỗi tương tác chuột: `MouseDown` (bắt đầu), `MouseMove` (cập nhật nét tạm), `MouseUp` (kết thúc và lưu trữ đối tượng).
-3. Hiểu rõ chu kỳ vẽ lại (Paint Lifecycle): **Tuyệt đối không vẽ trực tiếp trong sự kiện chuột**, mà lưu dữ liệu gốc vào danh sách đối tượng, sau đó yêu cầu hệ thống vẽ lại thông qua `canvas.Invalidate()`.
-4. Khử triệt để hiện tượng nhấp nháy (flickering) bằng cách sử dụng custom panel `DrawSurface` có bật `DoubleBuffered = true`.
-5. Đảm bảo toàn bộ tài nguyên GDI+ không được quản lý (unmanaged resources) như `Pen`, `Brush`, `Bitmap` được giải phóng tự động bằng cấu trúc `using`.
-
----
-
-## 2. Điểm khác biệt & Kiến trúc Code nổi bật (OOP Polymorphism)
-
-Thay vì áp dụng cách tiếp cận thông thường (sử dụng một câu lệnh `switch-case` đồ sộ bên trong Form như code mẫu của đa số sinh viên và AI), project này áp dụng **gợi ý mở rộng của giảng viên tại Mục 10 của tài liệu**:
-
-> *"Tạo lớp riêng cho từng loại hình vẽ thay vì dùng switch-case."*
-
-### Kiến trúc phân cấp kế thừa (Class Hierarchy)
-
-```
-              ┌────────────────────────┐
-              │   DrawItem (Abstract)  │
-              │ ────────────────────── │
-              │ + Start, End : Point   │
-              │ + Color : Color        │
-              │ + Width : float        │
-              │ + IsFilled : bool      │
-              │ + Draw(Graphics g)*    │
-              └───────────┬────────────┘
-                          │
-     ┌──────────────┬─────┴────────┬──────────────┬──────────────┐
-     ▼              ▼              ▼              ▼              ▼
-┌─────────┐   ┌──────────┐  ┌──────────────┐┌────────────┐┌────────────┐
-│ PenItem │   │ LineItem │  │RectangleItem ││EllipseItem ││ EraserItem │
-└─────────┘   └──────────┘  └──────────────┘└────────────┘└────────────┘
-```
-
-### Ưu điểm vượt trội:
-1. **Tuân thủ nguyên lý Đóng/Mở (Open/Closed Principle - SOLID):** Khi muốn bổ sung thêm các hình vẽ mới (như Tam giác, Mũi tên, Đa giác...), chỉ cần tạo thêm lớp kế thừa mới mà **không cần sửa đổi bất kỳ dòng code nào** trong hàm vẽ của Form.
-2. **Vẽ sạch sẽ và tối ưu:** Trong sự kiện `Canvas_Paint`, Form chỉ cần gọi:
-   ```csharp
-   foreach (DrawItem item in items)
-   {
-       item.Draw(e.Graphics);
-   }
-   ```
-3. **Mỗi hình tự quản lý logic vẽ của mình:**
-   - `PenItem`: Vẽ nét tự do mượt mà với `LineCap.Round`, `LineJoin.Round` và đường polyline nhiều điểm, không lo đứt đoạn.
-   - `RectangleItem`: Tự động chuẩn hóa tọa độ bằng `Math.Min` và `Math.Abs`, hỗ trợ cả viền nét và tô màu đặc (`IsFilled`).
-   - `EllipseItem`: Tự động tính vùng chữ nhật bao quanh, xử lý hoàn hảo việc kéo chuột theo mọi hướng.
-   - `EraserItem`: Tẩy xóa nét vẽ mượt mà dựa trên màu nền canvas hiện tại.
-4. **Áp dụng Factory Pattern:** Hàm `DrawItem.Create(...)` giúp khởi tạo đúng đối tượng một cách an toàn và gọn gàng.
-
----
-
-## 3. Danh sách Điều khiển (Controls) trên Giao diện
-
-| Nhóm chức năng | Loại Control | Tên Control (`Name`) | Chức năng / Mô tả chi tiết |
-| :--- | :---: | :---: | :--- |
-| **Công cụ vẽ** | `ComboBox` | `cboMode` | Chọn chế độ vẽ: Pen, Line, Rectangle, Ellipse, Eraser |
-| | `NumericUpDown` | `nudWidth` | Điều chỉnh độ dày nét vẽ từ 1 đến 20 px |
-| | `CheckBox` | `chkFill` | Bật/tắt chế độ tô màu đặc (Fill) cho Rectangle và Ellipse |
-| **Màu sắc** | `Button` | `btnColor` | Mở hộp thoại `ColorDialog` để chọn mã màu vẽ tùy ý |
-| | `Panel` | `pnlColorPreview` | Hiển thị ô màu hiện hành trực quan |
-| | `FlowLayoutPanel` | `flpPalette` | Bảng 10 ô màu nhanh (Đen, Trắng, Đỏ, Cam, Vàng, Xanh lá, Xanh lam, Tím, Nâu, Xám) |
-| **Tệp & Canvas** | `Button` | `btnOpen` | Mở hộp thoại `OpenFileDialog` nạp ảnh từ máy tính làm nền để vẽ đè |
-| | `Button` | `btnSave` | Mở hộp thoại `SaveFileDialog` xuất toàn bộ bản vẽ ra file PNG |
-| | `Button` | `btnBgColor` | Mở hộp thoại chọn màu nền Canvas tùy biến |
-| **Lịch sử vẽ** | `Button` | `btnUndo` | Hoàn tác xóa nét vẽ gần nhất (`Ctrl + Z`) |
-| | `Button` | `btnRedo` | Phục hồi nét vẽ vừa hoàn tác (`Ctrl + Y`) |
-| | `Button` | `btnClear` | Xóa sạch toàn bộ nét vẽ và ảnh nền (kèm xác nhận an toàn) |
-| **Vùng vẽ chính** | `DrawSurface` (Panel) | `canvas` | Vùng vẽ chính có `DoubleBuffered = true`, con trỏ tâm ngắm `Cursors.Cross` |
-| **Thanh trạng thái** | `Label` | `lblStatus` | Hiển thị tọa độ chuột `X, Y`, chế độ, độ dày nét và số đối tượng |
-
----
-
-## 4. Chi tiết các chức năng & Ảnh chụp màn hình minh họa
+## 4. Chức năng
 
 ### 4.1. Khởi tạo & Giao diện tổng quan Simple Paint Studio
 
@@ -210,6 +135,7 @@ _Mô tả: Hộp thoại lưu ảnh thành công ra file PNG chuẩn đồ họa
 ### 4.13. Chức năng Hoàn tác (Undo) và Làm lại (Redo)
 
 Hỗ trợ phục hồi thao tác linh hoạt:
+
 - Nhấn nút **Undo** hoặc phím tắt `Ctrl + Z` để xóa nét vẽ gần nhất.
 - Nhấn nút **Redo** hoặc phím tắt `Ctrl + Y` để khôi phục lại nét vẽ vừa hoàn tác nhờ cấu trúc ngăn xếp `Stack<DrawItem>`.
 
@@ -232,6 +158,7 @@ _Mô tả: Canvas sau khi xác nhận xóa sạch toàn bộ vùng vẽ._
 ### 4.15. Hiển thị tọa độ chuột và thông số thời gian thực trên StatusStrip
 
 Thanh trạng thái bên dưới liên tục cập nhật theo thời gian thực:
+
 - Tọa độ con trỏ chuột (`X = ..., Y = ...`) mỗi khi di chuyển trên Canvas.
 - Tên công cụ / chế độ vẽ hiện hành.
 - Độ dày nét vẽ đang chọn (`...px`).
@@ -263,4 +190,4 @@ Lab08/
 
 ---
 
-*COMP1019 - Lập trình trên Windows | ThS. Lê Thanh Thoại - HCMUE*
+_COMP1019 - Lập trình trên Windows | ThS. Lê Thanh Thoại - HCMUE_

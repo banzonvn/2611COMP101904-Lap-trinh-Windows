@@ -9,42 +9,7 @@
 
 ---
 
-## 1. Mục tiêu bài lab
-
-- Nắm vững các cấu trúc cơ bản của C#: biến, kiểu dữ liệu, các vòng lặp (`do...while`, `for`, `foreach`), cấu trúc rẽ nhánh (`switch...case`).
-- Khởi tạo, quản lý và xử lý dữ liệu với mảng một chiều (`int[]`).
-- Rèn luyện kỹ thuật lập trình theo module: chia tách bài toán thành các phương thức (methods) độc lập, rõ ràng.
-- Xử lý ngoại lệ và kiểm tra tính hợp lệ của dữ liệu nhập (Data Validation) bằng `int.TryParse`:
-  - Bắt lỗi khi người dùng chọn sai chức năng Menu (chống crash).
-  - Kiểm tra số lượng phần tử $n$ phải là số nguyên dương ($n > 0$).
-  - Kiểm tra từng phần tử mảng phải đúng định dạng số nguyên.
-- Chặn thực thi các chức năng tính toán nếu người dùng chưa thực hiện nhập mảng.
-
----
-
-## 2. Danh sách các phương thức (Methods) trong chương trình
-
-| STT | Tên phương thức                     | Kiểu trả về | Mô tả chức năng                                                         |
-| :-: | :---------------------------------- | :---------: | :---------------------------------------------------------------------- |
-|  1  | `HienThiMenu()`                     |   `void`    | In danh mục các chức năng (1 - 7) và tùy chọn thoát (0).                |
-|  2  | `NhapSoNguyen(string message)`      |    `int`    | Nhập số nguyên an toàn, lặp yêu cầu nếu nhập sai định dạng.             |
-|  3  | `NhapSoNguyenDuong(string message)` |    `int`    | Bắt buộc nhập số nguyên dương ($> 0$).                                  |
-|  4  | `KiemTraDaNhapMang(bool daNhap)`    |   `bool`    | Kiểm tra trạng thái đã nhập mảng trước khi thực hiện các tính năng 2-7. |
-|  5  | `NhapMang()`                        |   `int[]`   | Nhập số lượng phần tử $n$ và nhập từng giá trị phần tử.                 |
-|  6  | `XuatMang(int[] a)`                 |   `void`    | In danh sách các phần tử mảng ra màn hình console.                      |
-|  7  | `TinhTong(int[] a)`                 |    `int`    | Tính tổng giá trị tất cả các phần tử trong mảng.                        |
-|  8  | `TimMax(int[] a)`                   |    `int`    | Tìm và trả về giá trị lớn nhất trong mảng.                              |
-|  9  | `TimMin(int[] a)`                   |    `int`    | Tìm và trả về giá trị nhỏ nhất trong mảng.                              |
-| 10  | `DemChan(int[] a)`                  |    `int`    | Đếm số lượng phần tử chẵn ($x \pmod 2 == 0$).                           |
-| 11  | `DemLe(int[] a)`                    |    `int`    | Đếm số lượng phần tử lẻ ($x \pmod 2 \neq 0$).                           |
-| 12  | `SapXepTangDan(int[] a)`            |   `void`    | Sắp xếp mảng tăng dần bằng thuật toán Bubble Sort.                      |
-| 13  | `TimKiem(int[] a, int x)`           |    `int`    | Trả về vị trí index đầu tiên của $x$, trả về $-1$ nếu không tồn tại.    |
-
----
-
 ## 3. Kết quả thực nghiệm và minh chứng chức năng
-
-> _Ghi chú: Toàn bộ ảnh chụp màn hình minh chứng được đặt tại thư mục `images/` trong thư mục `Lab02`._
 
 ### 3.1. Giao diện Menu chính
 

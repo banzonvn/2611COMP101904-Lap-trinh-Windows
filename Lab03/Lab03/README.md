@@ -9,64 +9,7 @@
 
 ---
 
-## 1. Giới thiệu & Mục tiêu
-
-Bài thực hành nhằm xây dựng ứng dụng **Console Application** quản lý sinh viên bằng ngôn ngữ **C#** trên môi trường **Visual Studio**, áp dụng toàn diện các nguyên lý lập trình hướng đối tượng (OOP) và kỹ thuật xử lý dữ liệu hiện đại với các mục tiêu:
-
-- Vận dụng kiến thức về Class, Object, Property, Constructor và tính Đóng gói (Encapsulation).
-- Mô hình hóa quan hệ kế thừa (Inheritance): lớp `SinhVien` kế thừa từ lớp `Nguoi`.
-- Quản lý tập hợp đối tượng bằng cấu trúc dữ liệu `List<SinhVien>`.
-- Tổ chức kiến trúc phân tầng: tách biệt tầng giao diện (`Program.cs`) và tầng dịch vụ nghiệp vụ (`QuanLySinhVien.cs`).
-- Ứng dụng các phương thức LINQ cơ bản (`Any`, `FirstOrDefault`, `Where`, `OrderByDescending`) để tìm kiếm, lọc và sắp xếp dữ liệu.
-- Xử lý ngoại lệ và kiểm tra tính hợp lệ của dữ liệu đầu vào (Validation), đảm bảo chương trình không bị dừng đột ngột khi nhập sai.
-
----
-
-## 2. Yêu cầu hệ thống & Công cụ phát triển
-
-- **IDE:** Microsoft Visual Studio (2019/2022) / VS Code
-- **Framework:** .NET 8.0 / .NET 9.0 / .NET 10.0 Console Application
-- **Ngôn ngữ:** C#
-
----
-
-## 3. Cấu trúc chương trình & Danh sách các lớp
-
-| STT | Tên Class        | Thuộc tính / Phương thức chính                                                                        | Vai trò / Yêu cầu kỹ thuật                                                                                                               |
-| :-: | :--------------- | :---------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------- |
-|  1  | `Nguoi`          | `HoTen`, `NgaySinh`<br>`LayThongTin()` (virtual)                                                      | Là lớp cha (Base Class), chứa constructor khởi tạo và phương thức hiển thị có thể override.                                              |
-|  2  | `SinhVien`       | `MaSinhVien`, `MaLop`, `DiemTrungBinh`<br>`XepLoai()`, `LayThongTin()` (override)                     | Kế thừa từ `Nguoi`, kiểm tra ràng buộc `DiemTrungBinh` từ 0 đến 10, phân loại học lực và ghi đè thông tin.                               |
-|  3  | `QuanLySinhVien` | `Them()`, `SuaDiem()`, `Xoa()`, `TimTheoMa()`, `TimTheoTen()`, `SapXepTheoDiem()`, `LocSinhVienDat()` | Tầng Service đóng gói `List<SinhVien>`, thực hiện toàn bộ thao tác CRUD và xử lý LINQ, không để `Program` can thiệp trực tiếp danh sách. |
-|  4  | `Program`        | `Main()`, `HienThiMenu()`, các hàm nhập liệu từ bàn phím                                              | Điều khiển luồng chương trình, điều hướng menu Console và bắt lỗi nhập liệu.                                                             |
-
----
-
-## 4. Xử lý logic chương trình
-
-1. **Khởi tạo dữ liệu mẫu:**
-   - Khi khởi động, nạp sẵn 4 sinh viên mẫu vào danh sách để thuận tiện kiểm thử các chức năng lọc, tìm kiếm và sắp xếp.
-2. **Thêm sinh viên mới (Chức năng 1):**
-   - Mã sinh viên không được để trống và không được trùng với các mã đã có (dùng `Any()` để kiểm tra).
-   - Họ tên và mã lớp không được bỏ trống.
-   - Ngày sinh phải đúng định dạng `dd/MM/yyyy`.
-   - Điểm trung bình chỉ nhận số thực trong khoảng từ `0` đến `10`.
-3. **Xuất danh sách (Chức năng 2):**
-   - In bảng danh sách căn lề thẳng hàng, hiển thị: Mã SV, Họ và Tên, Ngày sinh, Mã lớp, ĐTB và Xếp loại.
-4. **Tìm kiếm (Chức năng 3 & 4):**
-   - Tìm theo mã: dùng `FirstOrDefault()` so sánh chính xác mã sinh viên.
-   - Tìm theo tên: dùng `Where()` lọc các sinh viên có họ tên chứa từ khóa tìm kiếm (không phân biệt hoa thường).
-5. **Cập nhật & Xóa (Chức năng 5 & 6):**
-   - Sửa điểm: Kiểm tra mã sinh viên tồn tại, nếu có thì nhập điểm mới (0–10) và cập nhật.
-   - Xóa sinh viên: Xóa đối tượng khỏi danh sách theo mã đã nhập.
-6. **Sắp xếp & Lọc bằng LINQ (Chức năng 7 & 8):**
-   - Sắp xếp giảm dần theo điểm: Dùng `OrderByDescending(s => s.DiemTrungBinh)`.
-   - Lọc sinh viên đạt: Dùng `Where(s => s.DiemTrungBinh >= 5.0)`.
-
----
-
 ## 5. Kết quả thực nghiệm & Minh họa chức năng
-
-> _Ghi chú: Đặt các file ảnh chụp minh chứng vào thư mục `images/` trong thư mục bài nộp._
 
 ### 5.1. Thêm sinh viên mới từ bàn phím (Chức năng 1)
 
