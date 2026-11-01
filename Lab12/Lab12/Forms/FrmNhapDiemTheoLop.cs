@@ -39,7 +39,6 @@ namespace QLSinhVienLab12.Forms
         private Label _lblStudentClass = null!;
 
         private Panel _pnlToolbarContainer = null!;
-        private FlowLayoutPanel _flpToolbar = null!;
 
         private Panel _pnlAlert = null!;
         private Label _lblAlertIcon = null!;
@@ -71,151 +70,155 @@ namespace QLSinhVienLab12.Forms
         private void InitializeComponent()
         {
             this.Text = "Quản lý Kết quả học tập - Data Binding & SqlTransaction | COMP1019 Lab 12 - Lê Hoàng Quân";
-            this.Size = new Size(1300, 840);
-            this.MinimumSize = new Size(1100, 720);
+            this.Size = new Size(1150, 780);
+            this.MinimumSize = new Size(920, 620);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Font = new Font("Segoe UI", 9.5f, FontStyle.Regular);
             this.BackColor = Color.FromArgb(248, 250, 252); // Soft Light Background
 
             // ================================================================
-            // 1. TOP HEADER PANEL (Light, clean, spacious - NO overlapping)
+            // 1. TOP HEADER PANEL (TableLayoutPanel - Responsive, NO Overlap)
             // ================================================================
             _pnlHeader = new Panel
             {
                 Dock = DockStyle.Top,
-                Height = 84,
+                Height = 74,
                 BackColor = Color.White,
-                Padding = new Padding(24, 12, 24, 12)
+                Padding = new Padding(20, 10, 20, 10)
             };
             _pnlHeader.Paint += PnlHeader_Paint;
 
-            // Left Title Group
+            var tlpHeader = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 2,
+                RowCount = 1,
+                BackColor = Color.Transparent,
+                Margin = new Padding(0),
+                Padding = new Padding(0)
+            };
+            tlpHeader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 56f));
+            tlpHeader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 44f));
+
             var pnlHeaderLeft = new Panel
             {
-                Dock = DockStyle.Left,
-                Width = 620,
-                BackColor = Color.Transparent
+                Dock = DockStyle.Fill,
+                BackColor = Color.Transparent,
+                Margin = new Padding(0)
             };
 
             _lblHeaderTitle = new Label
             {
                 Text = "QUẢN LÝ KẾT QUẢ HỌC TẬP (DATA BINDING & TRANSACTION)",
                 ForeColor = Color.FromArgb(15, 23, 42), // Deep Slate
-                Font = new Font("Segoe UI", 13.0f, FontStyle.Bold),
-                Location = new Point(0, 4),
-                AutoSize = true
+                Font = new Font("Segoe UI", 12.0f, FontStyle.Bold),
+                Location = new Point(0, 2),
+                AutoSize = true,
+                UseMnemonic = false
             };
 
             _lblHeaderSub = new Label
             {
-                Text = "COMP1019 - Lập trình trên Windows | ThS. Lê Thanh Thoại - Khoa CNTT, HCMUE",
+                Text = "COMP1019 - Lập trình trên Windows | ThS. Lê Thanh Thoại - HCMUE",
                 ForeColor = Color.FromArgb(100, 116, 139), // Slate 500
-                Font = new Font("Segoe UI", 9.2f),
-                Location = new Point(1, 35),
-                AutoSize = true
+                Font = new Font("Segoe UI", 8.8f),
+                Location = new Point(0, 28),
+                AutoSize = true,
+                UseMnemonic = false
             };
             pnlHeaderLeft.Controls.Add(_lblHeaderTitle);
             pnlHeaderLeft.Controls.Add(_lblHeaderSub);
 
-            // Right Student Info Group (Transparent background, distinct text color)
             var pnlHeaderRight = new Panel
             {
-                Dock = DockStyle.Right,
-                Width = 480,
-                BackColor = Color.Transparent
+                Dock = DockStyle.Fill,
+                BackColor = Color.Transparent,
+                Margin = new Padding(0)
             };
 
             _lblStudentName = new Label
             {
                 Text = "Sinh viên: Lê Hoàng Quân  |  MSSV: 51.01.104.082",
                 ForeColor = Color.FromArgb(2, 132, 199), // Clean Sky Blue 600
-                Font = new Font("Segoe UI", 9.8f, FontStyle.Bold),
-                Location = new Point(40, 6),
-                AutoSize = true
+                Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
+                Dock = DockStyle.Top,
+                Height = 24,
+                TextAlign = ContentAlignment.MiddleRight,
+                UseMnemonic = false
             };
 
             _lblStudentClass = new Label
             {
                 Text = "Lớp: 51.CNTT.A  |  Nhóm: 4  |  Học phần Buổi 12",
                 ForeColor = Color.FromArgb(71, 85, 105), // Slate 600
-                Font = new Font("Segoe UI", 9.0f),
-                Location = new Point(41, 32),
-                AutoSize = true
+                Font = new Font("Segoe UI", 8.8f),
+                Dock = DockStyle.Top,
+                Height = 22,
+                TextAlign = ContentAlignment.MiddleRight,
+                UseMnemonic = false
             };
-
-            btnTestConn = new Button
-            {
-                Text = "⚡ Kiểm tra CSDL",
-                BackColor = Color.FromArgb(241, 245, 249),
-                ForeColor = Color.FromArgb(30, 41, 59),
-                FlatStyle = FlatStyle.Flat,
-                Font = new Font("Segoe UI", 8.8f, FontStyle.Bold),
-                Location = new Point(340, 26),
-                Size = new Size(135, 28),
-                Cursor = Cursors.Hand
-            };
-            btnTestConn.FlatAppearance.BorderColor = Color.FromArgb(203, 213, 225);
-            btnTestConn.FlatAppearance.BorderSize = 1;
-            btnTestConn.Click += (s, e) => CheckConnectionLive();
-
-            pnlHeaderRight.Controls.Add(_lblStudentName);
             pnlHeaderRight.Controls.Add(_lblStudentClass);
-            pnlHeaderRight.Controls.Add(btnTestConn);
+            pnlHeaderRight.Controls.Add(_lblStudentName);
 
-            _pnlHeader.Controls.Add(pnlHeaderLeft);
-            _pnlHeader.Controls.Add(pnlHeaderRight);
+            tlpHeader.Controls.Add(pnlHeaderLeft, 0, 0);
+            tlpHeader.Controls.Add(pnlHeaderRight, 1, 0);
+            _pnlHeader.Controls.Add(tlpHeader);
 
             // ================================================================
-            // 2. TOOLBAR PANEL (FlowLayoutPanel - Guaranteed NO text collision)
+            // 2. TOOLBAR CONTAINER (2 Distinct Rows - Zero Squishing / NO Overlap)
             // ================================================================
             _pnlToolbarContainer = new Panel
             {
                 Dock = DockStyle.Top,
-                Height = 62,
+                Height = 94,
                 BackColor = Color.White,
                 Padding = new Padding(20, 10, 20, 10)
             };
 
-            _flpToolbar = new FlowLayoutPanel
+            // Row 1: Filter Row (Lớp, Môn học, Tải Danh Sách)
+            var pnlRow1 = new FlowLayoutPanel
             {
-                Dock = DockStyle.Fill,
+                Dock = DockStyle.Top,
+                Height = 34,
                 FlowDirection = FlowDirection.LeftToRight,
                 WrapContents = false,
-                AutoScroll = true
+                AutoScroll = false,
+                BackColor = Color.Transparent,
+                Margin = new Padding(0)
             };
 
             var lblLop = new Label
             {
                 Text = "Chọn lớp:",
-                Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
+                Font = new Font("Segoe UI", 9.2f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(51, 65, 85),
-                Margin = new Padding(0, 7, 6, 0),
+                Margin = new Padding(0, 5, 8, 0),
                 AutoSize = true
             };
 
             cboLop = new ComboBox
             {
                 DropDownStyle = ComboBoxStyle.DropDownList,
-                Width = 200,
-                Font = new Font("Segoe UI", 9.5f),
-                Margin = new Padding(0, 3, 18, 0)
+                Width = 190,
+                Font = new Font("Segoe UI", 9.2f),
+                Margin = new Padding(0, 2, 24, 0)
             };
 
             var lblMonHoc = new Label
             {
                 Text = "Chọn môn học:",
-                Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
+                Font = new Font("Segoe UI", 9.2f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(51, 65, 85),
-                Margin = new Padding(0, 7, 6, 0),
+                Margin = new Padding(0, 5, 8, 0),
                 AutoSize = true
             };
 
             cboMonHoc = new ComboBox
             {
                 DropDownStyle = ComboBoxStyle.DropDownList,
-                Width = 210,
-                Font = new Font("Segoe UI", 9.5f),
-                Margin = new Padding(0, 3, 18, 0)
+                Width = 220,
+                Font = new Font("Segoe UI", 9.2f),
+                Margin = new Padding(0, 2, 20, 0)
             };
 
             btnTaiDanhSach = new Button
@@ -224,24 +227,43 @@ namespace QLSinhVienLab12.Forms
                 BackColor = Color.FromArgb(224, 242, 254), // Soft sky-blue
                 ForeColor = Color.FromArgb(3, 105, 161),
                 FlatStyle = FlatStyle.Flat,
-                Font = new Font("Segoe UI", 9.2f, FontStyle.Bold),
-                Size = new Size(140, 32),
-                Margin = new Padding(0, 1, 10, 0),
+                Font = new Font("Segoe UI", 9.0f, FontStyle.Bold),
+                Size = new Size(170, 32),
+                Margin = new Padding(0, 1, 0, 0),
                 Cursor = Cursors.Hand
             };
             btnTaiDanhSach.FlatAppearance.BorderColor = Color.FromArgb(186, 230, 253);
             btnTaiDanhSach.FlatAppearance.BorderSize = 1;
             btnTaiDanhSach.Click += btnTaiDanhSach_Click;
 
+            pnlRow1.Controls.AddRange(new Control[]
+            {
+                lblLop, cboLop,
+                lblMonHoc, cboMonHoc,
+                btnTaiDanhSach
+            });
+
+            // Row 2: Action Row (Lưu Transaction, Rollback Demo, Làm Mới, Kiểm Tra CSDL)
+            var pnlRow2 = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Bottom,
+                Height = 34,
+                FlowDirection = FlowDirection.LeftToRight,
+                WrapContents = false,
+                AutoScroll = false,
+                BackColor = Color.Transparent,
+                Margin = new Padding(0)
+            };
+
             btnLuuTatCa = new Button
             {
-                Text = "💾 Lưu Tất Cả (Transaction)",
+                Text = "💾 Lưu Tất Cả",
                 BackColor = Color.FromArgb(236, 253, 245), // Soft emerald
                 ForeColor = Color.FromArgb(4, 120, 87),
                 FlatStyle = FlatStyle.Flat,
-                Font = new Font("Segoe UI", 9.2f, FontStyle.Bold),
-                Size = new Size(185, 32),
-                Margin = new Padding(0, 1, 10, 0),
+                Font = new Font("Segoe UI", 9.0f, FontStyle.Bold),
+                Size = new Size(155, 32),
+                Margin = new Padding(0, 0, 12, 0),
                 Cursor = Cursors.Hand
             };
             btnLuuTatCa.FlatAppearance.BorderColor = Color.FromArgb(167, 243, 208);
@@ -250,13 +272,13 @@ namespace QLSinhVienLab12.Forms
 
             btnRollbackDemo = new Button
             {
-                Text = "🧪 Thử Rollback Lỗi",
+                Text = "🧪 Thử Rollback",
                 BackColor = Color.FromArgb(255, 241, 242), // Soft rose
                 ForeColor = Color.FromArgb(190, 18, 60),
                 FlatStyle = FlatStyle.Flat,
                 Font = new Font("Segoe UI", 9.0f, FontStyle.Bold),
-                Size = new Size(145, 32),
-                Margin = new Padding(0, 1, 10, 0),
+                Size = new Size(165, 32),
+                Margin = new Padding(0, 0, 12, 0),
                 Cursor = Cursors.Hand
             };
             btnRollbackDemo.FlatAppearance.BorderColor = Color.FromArgb(254, 205, 211);
@@ -270,24 +292,39 @@ namespace QLSinhVienLab12.Forms
                 ForeColor = Color.FromArgb(71, 85, 105),
                 FlatStyle = FlatStyle.Flat,
                 Font = new Font("Segoe UI", 9.0f, FontStyle.Bold),
-                Size = new Size(105, 32),
-                Margin = new Padding(0, 1, 0, 0),
+                Size = new Size(135, 32),
+                Margin = new Padding(0, 0, 12, 0),
                 Cursor = Cursors.Hand
             };
             btnResetSample.FlatAppearance.BorderColor = Color.FromArgb(203, 213, 225);
             btnResetSample.FlatAppearance.BorderSize = 1;
             btnResetSample.Click += btnResetSample_Click;
 
-            _flpToolbar.Controls.AddRange(new Control[]
+            btnTestConn = new Button
             {
-                lblLop, cboLop,
-                lblMonHoc, cboMonHoc,
-                btnTaiDanhSach,
+                Text = "⚡ Kiểm Tra DB",
+                BackColor = Color.FromArgb(248, 250, 252),
+                ForeColor = Color.FromArgb(30, 41, 59),
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 9.0f, FontStyle.Bold),
+                Size = new Size(155, 32),
+                Margin = new Padding(0),
+                Cursor = Cursors.Hand
+            };
+            btnTestConn.FlatAppearance.BorderColor = Color.FromArgb(203, 213, 225);
+            btnTestConn.FlatAppearance.BorderSize = 1;
+            btnTestConn.Click += (s, e) => CheckConnectionLive();
+
+            pnlRow2.Controls.AddRange(new Control[]
+            {
                 btnLuuTatCa,
                 btnRollbackDemo,
-                btnResetSample
+                btnResetSample,
+                btnTestConn
             });
-            _pnlToolbarContainer.Controls.Add(_flpToolbar);
+
+            _pnlToolbarContainer.Controls.Add(pnlRow2);
+            _pnlToolbarContainer.Controls.Add(pnlRow1);
 
             // ================================================================
             // 3. ALERT BANNER PANEL (Soft colors, clean message)
@@ -295,19 +332,20 @@ namespace QLSinhVienLab12.Forms
             _pnlAlert = new Panel
             {
                 Dock = DockStyle.Top,
-                Height = 38,
+                Height = 36,
                 BackColor = Color.FromArgb(236, 253, 245), // Default soft emerald
                 Visible = false,
-                Padding = new Padding(24, 8, 24, 8)
+                Padding = new Padding(20, 6, 20, 6)
             };
 
             _lblAlertIcon = new Label
             {
                 Text = "✔",
-                Font = new Font("Segoe UI", 10.0f, FontStyle.Bold),
+                Font = new Font("Segoe UI", 9.5f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(4, 120, 87),
-                Location = new Point(24, 9),
-                AutoSize = true
+                Location = new Point(20, 8),
+                AutoSize = true,
+                UseMnemonic = false
             };
 
             _lblAlertText = new Label
@@ -315,8 +353,9 @@ namespace QLSinhVienLab12.Forms
                 Text = "Thông báo hệ thống",
                 Font = new Font("Segoe UI", 9.2f, FontStyle.Bold),
                 ForeColor = Color.FromArgb(6, 95, 70),
-                Location = new Point(50, 10),
-                AutoSize = true
+                Location = new Point(46, 8),
+                AutoSize = true,
+                UseMnemonic = false
             };
             _pnlAlert.Controls.Add(_lblAlertIcon);
             _pnlAlert.Controls.Add(_lblAlertText);
@@ -476,12 +515,31 @@ namespace QLSinhVienLab12.Forms
             _statusStrip = new StatusStrip
             {
                 BackColor = Color.FromArgb(241, 245, 249),
-                Font = new Font("Segoe UI", 9.0f)
+                Font = new Font("Segoe UI", 9.0f),
+                Padding = new Padding(12, 4, 12, 4)
             };
 
-            _tslStatus = new ToolStripStatusLabel("Hệ thống đã sẵn sàng.") { Spring = true, TextAlign = ContentAlignment.MiddleLeft };
-            _tslBinding = new ToolStripStatusLabel("BindingSource: Sẵn sàng") { BorderSides = ToolStripStatusLabelBorderSides.Left, BorderStyle = Border3DStyle.Etched };
-            _tslEngine = new ToolStripStatusLabel("Động cơ: SQL Server (QLSinhVienLab12)") { BorderSides = ToolStripStatusLabelBorderSides.Left, BorderStyle = Border3DStyle.Etched, ForeColor = Color.FromArgb(30, 64, 175), Font = new Font("Segoe UI", 9.0f, FontStyle.Bold) };
+            _tslStatus = new ToolStripStatusLabel("Hệ thống đã sẵn sàng.")
+            {
+                TextAlign = ContentAlignment.MiddleLeft,
+                Margin = new Padding(0, 0, 16, 0)
+            };
+            _tslBinding = new ToolStripStatusLabel("Nạp: Sẵn sàng")
+            {
+                BorderSides = ToolStripStatusLabelBorderSides.Left,
+                BorderStyle = Border3DStyle.Etched,
+                Padding = new Padding(12, 0, 12, 0),
+                Margin = new Padding(0)
+            };
+            _tslEngine = new ToolStripStatusLabel("Động cơ: In-Memory Mock")
+            {
+                BorderSides = ToolStripStatusLabelBorderSides.Left,
+                BorderStyle = Border3DStyle.Etched,
+                ForeColor = Color.FromArgb(30, 64, 175),
+                Font = new Font("Segoe UI", 9.0f, FontStyle.Bold),
+                Padding = new Padding(12, 0, 12, 0),
+                Margin = new Padding(0)
+            };
 
             _statusStrip.Items.AddRange(new ToolStripItem[] { _tslStatus, _tslBinding, _tslEngine });
 
@@ -510,6 +568,8 @@ namespace QLSinhVienLab12.Forms
         {
             dgvKetQua.AutoGenerateColumns = false;
             dgvKetQua.Columns.Clear();
+            dgvKetQua.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dgvKetQua.ColumnHeadersHeight = 36;
 
             var colMaSV = new DataGridViewTextBoxColumn
             {
@@ -525,7 +585,7 @@ namespace QLSinhVienLab12.Forms
                 Name = "HoTen",
                 DataPropertyName = "HoTen",
                 HeaderText = "Họ và Tên Sinh Viên",
-                FillWeight = 35,
+                FillWeight = 38,
                 ReadOnly = true
             };
 
@@ -533,7 +593,7 @@ namespace QLSinhVienLab12.Forms
             {
                 Name = "Diem",
                 DataPropertyName = "Diem",
-                HeaderText = "Điểm Thi (0 - 10) ✎",
+                HeaderText = "Điểm Thi (0 - 10)",
                 FillWeight = 20,
                 ReadOnly = false
             };
@@ -544,8 +604,8 @@ namespace QLSinhVienLab12.Forms
             {
                 Name = "GhiChu",
                 DataPropertyName = "GhiChu",
-                HeaderText = "Ghi Chú Đánh Giá ✎",
-                FillWeight = 25,
+                HeaderText = "Ghi Chú Đánh Giá",
+                FillWeight = 28,
                 ReadOnly = false
             };
 
@@ -574,13 +634,13 @@ namespace QLSinhVienLab12.Forms
             bool isConnected = ketQuaDAL.CheckConnection();
             if (isConnected)
             {
-                _tslEngine.Text = "Động cơ: Microsoft SQL Server (QLSinhVienLab12) 🟢 Online";
+                _tslEngine.Text = "Động cơ: SQL Server 🟢";
                 _tslEngine.ForeColor = Color.FromArgb(4, 120, 87);
                 ShowAlert("Kết nối thành công đến Microsoft SQL Server (Database: QLSinhVienLab12).", AlertType.Success);
             }
             else
             {
-                _tslEngine.Text = "Động cơ: In-Memory Relational Engine (Stored Proc & Trans Emulation) 🟡 Active";
+                _tslEngine.Text = "Động cơ: In-Memory Mock 🟡";
                 _tslEngine.ForeColor = Color.FromArgb(180, 83, 9);
                 ShowAlert("Đang chạy ở chế độ In-Memory Fallback Engine (Mô phỏng đầy đủ Stored Procedure & Transaction).", AlertType.Info);
             }
@@ -602,7 +662,7 @@ namespace QLSinhVienLab12.Forms
                 cboMonHoc.DisplayMember = "TenMon";
                 cboMonHoc.ValueMember = "MaMon";
 
-                _tslBinding.Text = $"Nạp ComboBox: {dtLop.Rows.Count} lớp, {dtMon.Rows.Count} môn";
+                _tslBinding.Text = $"Nạp: {dtLop.Rows.Count} lớp, {dtMon.Rows.Count} môn";
             }
             catch (Exception ex)
             {
