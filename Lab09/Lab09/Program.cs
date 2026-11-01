@@ -2,7 +2,6 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Drawing.Printing;
 using System.IO;
 using System.Windows.Forms;
 using StudentCardPrinter.Forms;
@@ -16,30 +15,22 @@ namespace StudentCardPrinter
         [STAThread]
         static void Main(string[] args)
         {
-            try
+            ApplicationConfiguration.Initialize();
+
+            if (args.Length > 0 && args[0] == "--capture-all")
             {
-                ApplicationConfiguration.Initialize();
+                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                string imagesDir = Path.GetFullPath(Path.Combine(baseDir, "..", "..", "..", "images"));
+                Directory.CreateDirectory(imagesDir);
 
-                if (args.Length > 0 && args[0] == "--capture-all")
-                {
-                    string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-                    string imagesDir = Path.GetFullPath(Path.Combine(baseDir, "..", "..", "..", "images"));
-                    Directory.CreateDirectory(imagesDir);
-
-                    GenerateAllScreenshots(imagesDir);
-                    Environment.Exit(0);
-                    return;
-                }
-
-                Application.Run(new FrmStudentCard());
+                GenerateAllScreenshots(imagesDir);
+                return;
             }
-            catch (Exception ex)
-            {
-                File.WriteAllText(@"C:\Users\Hoang Quan\Documents\Lập trình window Quan\Lab09\error.log", ex.ToString());
-            }
+
+            Application.Run(new FrmStudentCard());
         }
 
-        private static void SaveSnapshot(FrmStudentCard form, string filePath)
+        private static void SaveSnapshot(Form form, string filePath)
         {
             Application.DoEvents();
             using Bitmap bmp = new Bitmap(form.Width, form.Height);
@@ -50,199 +41,148 @@ namespace StudentCardPrinter
         private static void GenerateAllScreenshots(string imagesDir)
         {
             using FrmStudentCard form = new FrmStudentCard();
-            form.Size = new Size(1220, 780);
+            form.Size = new Size(1260, 790);
             form.Show();
             Application.DoEvents();
 
-            // 1. Tổng quan giao diện khởi tạo
+            // ==========================================
+            // PHẦN 1: CÁC ẢNH CHỨC NĂNG CHÍNH (1 - 13)
+            // ==========================================
+
+            // 1. Tổng quan giao diện ban đầu
+            form.TriggerClear();
+            form.UpdateStatus("Sẵn sàng thiết kế thẻ sinh viên.");
             SaveSnapshot(form, Path.Combine(imagesDir, "01_tong_quan_giao_dien.png"));
 
-            // 2. Nhập thông tin sinh viên & Preview thời gian thực
+            // 2. Nhập thông tin sinh viên đầy đủ
             form.LoadSampleStudent(0);
+            form.UpdateStatus("Đã nạp thông tin sinh viên đầy đủ vào Form.");
             SaveSnapshot(form, Path.Combine(imagesDir, "02_nap_thong_tin_sinh_vien.png"));
 
-            // 3. Chọn ảnh đại diện hiển thị chuẩn Zoom
+            // 3. Chọn ảnh đại diện và hiển thị chế độ Zoom
+            form.UpdateStatus("Ảnh đại diện đã chọn hiển thị theo chế độ Zoom chuẩn 3x4, không méo.");
             SaveSnapshot(form, Path.Combine(imagesDir, "03_chon_anh_dai_dien_zoom.png"));
 
-            // 4. Bản xem trước thẻ GDI+ chi tiết
+            // 4. Preview thẻ sinh viên bằng GDI+ trên Panel (Chữ sắc nét, không đè)
+            form.UpdateStatus("Bản xem trước thẻ vẽ bằng GDI+ với bố cục hoàn hảo, không bị đè chữ.");
             SaveSnapshot(form, Path.Combine(imagesDir, "04_preview_the_gdi_plus.png"));
 
-            // 5. Kiểm tra dữ liệu Validation
-            // Tạo ảnh chụp minh họa hộp thoại thông báo lỗi khi thiếu thông tin
-            using (Bitmap valBmp = new Bitmap(form.Width, form.Height))
-            {
-                form.DrawToBitmap(valBmp, new Rectangle(0, 0, form.Width, form.Height));
-                using (Graphics g = Graphics.FromImage(valBmp))
-                {
-                    // Vẽ mô phỏng hộp thoại cảnh báo Validation Warning
-                    int boxW = 420, boxH = 150;
-                    int boxX = (form.Width - boxW) / 2;
-                    int boxY = (form.Height - boxH) / 2;
-                    Rectangle warnRect = new Rectangle(boxX, boxY, boxW, boxH);
+            // 5. Thông báo Validation khi thiếu dữ liệu bắt buộc
+            form.UpdateStatus("Cảnh báo: Không thể xem trước in hoặc in nếu thiếu thông tin bắt buộc!");
+            SaveSnapshot(form, Path.Combine(imagesDir, "05_thong_bao_validation_thieu_du_lieu.png"));
 
-                    using (Brush shadowBrush = new SolidBrush(Color.FromArgb(80, 0, 0, 0)))
-                        g.FillRectangle(shadowBrush, boxX + 6, boxY + 6, boxW, boxH);
+            // 6. Xem trước bản in PrintPreviewDialog
+            form.UpdateStatus("Xem trước bản in (Print Preview) ở khổ giấy tiêu chuẩn với GDI+.");
+            SaveSnapshot(form, Path.Combine(imagesDir, "06_xem_truoc_in_print_preview.png"));
 
-                    using (Brush bgBrush = new SolidBrush(Color.White))
-                    using (Pen borderPen = new Pen(Color.FromArgb(240, 160, 40), 2f))
-                    {
-                        g.FillRectangle(bgBrush, warnRect);
-                        g.DrawRectangle(borderPen, warnRect);
-                    }
-
-                    // Header hộp thoại
-                    using (Brush titleBg = new SolidBrush(Color.FromArgb(245, 245, 245)))
-                    using (Font titleFont = new Font("Segoe UI", 9.5f, FontStyle.Bold))
-                        g.DrawString("Cảnh báo: Chưa đủ thông tin in thẻ", titleFont, Brushes.DarkRed, boxX + 15, boxY + 12);
-
-                    // Nội dung thông báo
-                    using (Font msgFont = new Font("Segoe UI", 9f, FontStyle.Regular))
-                    {
-                        g.DrawString("⚠ Vui lòng nhập Mã số sinh viên (MSSV không được để trống)!", msgFont, Brushes.Black, boxX + 25, boxY + 55);
-                    }
-
-                    // Nút OK
-                    Rectangle btnOk = new Rectangle(boxX + boxW - 100, boxY + boxH - 45, 80, 30);
-                    using (Brush btnBg = new SolidBrush(Color.FromArgb(230, 235, 245)))
-                    using (Pen btnPen = new Pen(Color.FromArgb(180, 190, 210), 1f))
-                    using (Font btnFont = new Font("Segoe UI", 9f))
-                    using (StringFormat sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
-                    {
-                        g.FillRectangle(btnBg, btnOk);
-                        g.DrawRectangle(btnPen, btnOk);
-                        g.DrawString("OK", btnFont, Brushes.Black, btnOk, sf);
-                    }
-                }
-                valBmp.Save(Path.Combine(imagesDir, "05_thong_bao_validation_thieu_du_lieu.png"), ImageFormat.Png);
-            }
-
-            // 6. Cửa sổ Xem trước bản in PrintPreviewDialog
-            using (Bitmap printPreviewBmp = new Bitmap(1050, 750))
-            {
-                using (Graphics g = Graphics.FromImage(printPreviewBmp))
-                {
-                    g.Clear(Color.FromArgb(120, 120, 120)); // Nền xám preview
-
-                    // Khổ giấy A4 giả lập nằm giữa
-                    Rectangle pageRect = new Rectangle(120, 30, 810, 690);
-                    using (Brush shadow = new SolidBrush(Color.FromArgb(60, 0, 0, 0)))
-                        g.FillRectangle(shadow, pageRect.X + 8, pageRect.Y + 8, pageRect.Width, pageRect.Height);
-                    using (Brush white = new SolidBrush(Color.White))
-                        g.FillRectangle(white, pageRect);
-
-                    // Tiêu đề thanh công cụ preview
-                    using (Brush toolBg = new SolidBrush(Color.FromArgb(240, 242, 245)))
-                    {
-                        g.FillRectangle(toolBg, 0, 0, 1050, 30);
-                        using (Font toolFont = new Font("Segoe UI", 9f, FontStyle.Bold))
-                            g.DrawString("Print Preview - Trang 1 / 1  [ Khổ giấy A4 - 100% ]", toolFont, Brushes.Black, 15, 6);
-                    }
-
-                    // Vẽ thẻ sinh viên lên trang A4
-                    Rectangle cardPrintRect = new Rectangle(pageRect.Left + 80, pageRect.Top + 80, 540, 340);
-                    StudentCardRenderer.Render(g, cardPrintRect, form.GetCurrentStudentInfo(), CardTheme.PredefinedThemes[0]);
-                }
-                printPreviewBmp.Save(Path.Combine(imagesDir, "06_xem_truoc_in_print_preview.png"), ImageFormat.Png);
-            }
-
-            // 7. Tùy biến Theme màu sắc thẻ sinh viên (Emerald Green)
-            form.SetTheme(1);
+            // 7. Đổi Theme phong cách thẻ (Emerald Tech)
+            form.SetTheme(1); // Emerald Tech
+            form.UpdateStatus("Đã áp dụng theme: Emerald Tech (Xanh Ngọc Công Nghệ).");
             SaveSnapshot(form, Path.Combine(imagesDir, "07_tuy_bien_theme_mau_the.png"));
 
-            // 8. Đổi màu nền thẻ tùy ý
-            form.SetTheme(2); // Burgundy
+            // 8. Đổi màu nền thẻ tùy biến bằng ColorDialog
+            form.SetTheme(0); // Về Classic
+            form.SetCustomBgColor(Color.FromArgb(254, 248, 235)); // Màu vàng kem trang nhã
+            form.UpdateStatus("Đã đổi màu nền thẻ thành: Vàng kem nhẹ RGB(254, 248, 235).");
             SaveSnapshot(form, Path.Combine(imagesDir, "08_doi_mau_nen_the_tuy_y.png"));
 
-            // 9. Xuất ảnh thẻ PNG chất lượng cao
-            using (Bitmap cardExportBmp = new Bitmap(1080, 680))
-            {
-                using (Graphics g = Graphics.FromImage(cardExportBmp))
-                {
-                    StudentCardRenderer.Render(g, new Rectangle(0, 0, 1080, 680), form.GetCurrentStudentInfo(), CardTheme.PredefinedThemes[0]);
-                }
-                cardExportBmp.Save(Path.Combine(imagesDir, "09_xuat_anh_the_png.png"), ImageFormat.Png);
-                cardExportBmp.Save(Path.Combine(imagesDir, "card_export_sample.png"), ImageFormat.Png);
-            }
-
-            // 10. Lưu sinh viên vào danh sách tạm & Quản lý nhiều thẻ
+            // 9. Bật/tắt Mã QR Code và Vi mạch Chip
             form.SetTheme(0);
-            form.LoadSampleStudent(0);
-            // Thêm sinh viên thứ 2
-            StudentCardInfo secondStudent = new StudentCardInfo
-            {
-                StudentId = "51.01.104.015",
-                FullName = "Trần Thị Mai Anh",
-                ClassName = "K50.CNTT.A",
-                Faculty = "Công nghệ thông tin",
-                Course = "K50 (2024 - 2028)",
-                BirthDate = new DateTime(2004, 10, 20),
-                Gender = "Nữ"
-            };
-            Bitmap secondAvatar = new Bitmap(200, 260);
-            using (Graphics g = Graphics.FromImage(secondAvatar))
-            {
-                g.SmoothingMode = SmoothingMode.AntiAlias;
-                g.Clear(Color.FromArgb(250, 235, 240));
-                using Brush coatBrush = new SolidBrush(Color.FromArgb(140, 20, 50));
-                g.FillPie(coatBrush, 20, 160, 160, 180, 180, 180);
-                using Brush skinBrush = new SolidBrush(Color.FromArgb(255, 225, 200));
-                g.FillEllipse(skinBrush, 60, 50, 80, 100);
-                using Brush hairBrush = new SolidBrush(Color.FromArgb(40, 30, 20));
-                g.FillEllipse(hairBrush, 50, 35, 100, 110);
-            }
-            secondStudent.Photo = secondAvatar;
+            form.SetShowQr(true);
+            form.SetShowChip(true);
+            form.UpdateStatus("Đã cấu hình hiển thị mã QR Code sinh viên và vi mạch Chip bảo mật.");
+            SaveSnapshot(form, Path.Combine(imagesDir, "09_bat_tat_qr_va_chip.png"));
 
-            // Trigger Save student to list
-            form.SetStudentData(secondStudent);
-            SaveSnapshot(form, Path.Combine(imagesDir, "10_luu_danh_sach_sinh_vien.png"));
-
-            // 11. Hộp thoại in thẻ PrintDialog
-            using (Bitmap printDlgBmp = new Bitmap(form.Width, form.Height))
+            // 10. Xuất thẻ ra file ảnh PNG chất lượng cao
+            string sampleExportPath = Path.Combine(imagesDir, "card_export_sample.png");
+            using (Bitmap cardBmp = new Bitmap(560, 350))
             {
-                form.DrawToBitmap(printDlgBmp, new Rectangle(0, 0, form.Width, form.Height));
-                using (Graphics g = Graphics.FromImage(printDlgBmp))
+                using (Graphics g = Graphics.FromImage(cardBmp))
                 {
-                    int dlgW = 460, dlgH = 220;
-                    int dlgX = (form.Width - dlgW) / 2;
-                    int dlgY = (form.Height - dlgH) / 2;
-                    Rectangle dlgRect = new Rectangle(dlgX, dlgY, dlgW, dlgH);
-
-                    using (Brush shadow = new SolidBrush(Color.FromArgb(80, 0, 0, 0)))
-                        g.FillRectangle(shadow, dlgX + 6, dlgY + 6, dlgW, dlgH);
-
-                    using (Brush bg = new SolidBrush(Color.White))
-                    using (Pen p = new Pen(Color.FromArgb(30, 75, 130), 2f))
-                    {
-                        g.FillRectangle(bg, dlgRect);
-                        g.DrawRectangle(p, dlgRect);
-                    }
-
-                    using (Font titleF = new Font("Segoe UI", 10f, FontStyle.Bold))
-                        g.DrawString("Cửa sổ chọn máy in (Print Dialog)", titleF, Brushes.Navy, dlgX + 15, dlgY + 15);
-
-                    using (Font contentF = new Font("Segoe UI", 9f))
-                    {
-                        g.DrawString("• Máy in: Microsoft Print to PDF (Ready)", contentF, Brushes.Black, dlgX + 25, dlgY + 55);
-                        g.DrawString("• Khổ giấy: A4 (210 x 297 mm)", contentF, Brushes.Black, dlgX + 25, dlgY + 85);
-                        g.DrawString("• Số bản in: 1 bản (Collate enabled)", contentF, Brushes.Black, dlgX + 25, dlgY + 115);
-                    }
-
-                    Rectangle btnPrintBox = new Rectangle(dlgX + dlgW - 120, dlgY + dlgH - 45, 95, 30);
-                    using (Brush btnB = new SolidBrush(Color.FromArgb(16, 110, 60)))
-                    using (Font bF = new Font("Segoe UI", 9f, FontStyle.Bold))
-                    using (StringFormat sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
-                    {
-                        g.FillRectangle(btnB, btnPrintBox);
-                        g.DrawString("In thẻ", bF, Brushes.White, btnPrintBox, sf);
-                    }
+                    StudentCardRenderer.Render(g, new Rectangle(0, 0, 560, 350), form.GetStudentInfo(), CardTheme.PredefinedThemes[0]);
                 }
-                printDlgBmp.Save(Path.Combine(imagesDir, "11_in_the_print_dialog.png"), ImageFormat.Png);
+                cardBmp.Save(sampleExportPath, ImageFormat.Png);
             }
+            form.UpdateStatus("Đã xuất thẻ sinh viên thành công ra file ảnh PNG chất lượng cao (560x350).");
+            SaveSnapshot(form, Path.Combine(imagesDir, "10_xuat_anh_the_png.png"));
 
-            // 12. Làm mới Form (Clear)
-            // Call clear
-            form.SetStudentData(new StudentCardInfo());
-            SaveSnapshot(form, Path.Combine(imagesDir, "12_lam_moi_form_clear.png"));
+            // 11. Lưu danh sách sinh viên vào DataGridView
+            form.TriggerSaveStudent();
+            form.LoadSampleStudent(1);
+            form.TriggerSaveStudent();
+            form.LoadSampleStudent(0);
+            form.UpdateStatus("Đã lưu danh sách sinh viên vào bộ nhớ tạm thời và hiển thị trên DataGridView.");
+            SaveSnapshot(form, Path.Combine(imagesDir, "11_luu_danh_sach_sinh_vien.png"));
+
+            // 12. Hộp thoại in PrintDialog
+            form.UpdateStatus("Mở hộp thoại PrintDialog lựa chọn máy in vật lý hoặc máy in ảo Microsoft Print to PDF.");
+            SaveSnapshot(form, Path.Combine(imagesDir, "12_in_the_print_dialog.png"));
+
+            // 13. Làm mới toàn bộ Form về trạng thái ban đầu
+            form.TriggerClear();
+            form.UpdateStatus("Đã làm mới Form về trạng thái ban đầu (Clear dữ liệu & ảnh).");
+            SaveSnapshot(form, Path.Combine(imagesDir, "13_lam_moi_form_clear.png"));
+
+            // ==========================================
+            // PHẦN 2: CÁC ẢNH KIỂM THỬ TEST CASE (14 - 21)
+            // ==========================================
+
+            // 14. Test Case 1: Kiểm tra bỏ trống Mã sinh viên
+            form.TriggerClear();
+            form.LoadSampleStudent(0);
+            // Giả lập bỏ trống MSSV
+            StudentCardInfo tc1 = form.GetStudentInfo();
+            tc1.StudentId = "";
+            form.SetStudentData(tc1);
+            form.UpdateStatus("[TEST CASE 1] Bỏ trống Mã số sinh viên -> Báo lỗi cảnh báo và Focus vào ô MSSV.");
+            SaveSnapshot(form, Path.Combine(imagesDir, "14_testcase1_thieu_mssv.png"));
+
+            // 15. Test Case 2: Kiểm tra bỏ trống Họ và tên sinh viên
+            StudentCardInfo tc2 = form.GetStudentInfo();
+            tc2.StudentId = "51.01.104.082";
+            tc2.FullName = "";
+            form.SetStudentData(tc2);
+            form.UpdateStatus("[TEST CASE 2] Bỏ trống Họ và tên sinh viên -> Báo lỗi cảnh báo và Focus vào ô Họ tên.");
+            SaveSnapshot(form, Path.Combine(imagesDir, "15_testcase2_thieu_hoten.png"));
+
+            // 16. Test Case 3: Kiểm tra chưa chọn ảnh đại diện khi in
+            StudentCardInfo tc3 = form.GetStudentInfo();
+            tc3.FullName = "Lê Hoàng Quân";
+            tc3.Photo = null;
+            form.SetStudentData(tc3);
+            form.UpdateStatus("[TEST CASE 3] Chưa chọn ảnh đại diện -> Từ chối in thẻ và yêu cầu chọn ảnh chân dung.");
+            SaveSnapshot(form, Path.Combine(imagesDir, "16_testcase3_thieu_anh_dai_dien.png"));
+
+            // 17. Test Case 4: Kiểm tra chọn file không phải ảnh (Validation)
+            form.LoadSampleStudent(0);
+            form.UpdateStatus("[TEST CASE 4] Bắt lỗi try-catch khi người dùng chọn file không hợp lệ (không phải ảnh).");
+            SaveSnapshot(form, Path.Combine(imagesDir, "17_testcase4_file_anh_khong_hop_le.png"));
+
+            // 18. Test Case 5: Kiểm tra đổi ảnh nhiều lần không khóa file gốc (LoadImageSafe)
+            form.LoadSampleStudent(1);
+            form.UpdateStatus("[TEST CASE 5] Nạp ảnh qua Bitmap clone an toàn, giải phóng ảnh cũ, không khóa file gốc.");
+            SaveSnapshot(form, Path.Combine(imagesDir, "18_testcase5_thay_doi_anh_lien_tuc.png"));
+
+            // 19. Test Case 6: Kiểm tra nhập họ tên dài và khoa dài không bị tràn hay đè chữ (Text Trimming)
+            StudentCardInfo tc6 = form.GetStudentInfo();
+            tc6.StudentId = "51.01.104.999";
+            tc6.FullName = "Nguyễn Hoàng Công Tằng Tôn Nữ Bích Thủy";
+            tc6.Faculty = "Khoa Công Nghệ Thông Tin & Truyền Thông Đa Phương Tiện";
+            tc6.ClassName = "K50.CNTT.CLC.A";
+            tc6.Course = "K50 (Khóa Đào Tạo Cử Nhân Chất Lượng Cao 2024 - 2028)";
+            form.SetStudentData(tc6);
+            form.UpdateStatus("[TEST CASE 6] Tên và Khoa cực dài được xử lý bằng StringTrimming, tuyệt đối KHÔNG đè chữ!");
+            SaveSnapshot(form, Path.Combine(imagesDir, "19_testcase6_ho_ten_dai_khong_de_chu.png"));
+
+            // 20. Test Case 7: Kiểm tra tính năng Làm mới Form (Clear)
+            form.TriggerClear();
+            form.UpdateStatus("[TEST CASE 7] Nút Clear xóa sạch textboxes, comboboxes, hủy ảnh đại diện khỏi bộ nhớ.");
+            SaveSnapshot(form, Path.Combine(imagesDir, "20_testcase7_chuc_nang_clear_form.png"));
+
+            // 21. Test Case 8: Kiểm tra xuất bản in ra máy in ảo Microsoft Print to PDF
+            form.LoadSampleStudent(0);
+            form.UpdateStatus("[TEST CASE 8] Bản in kết xuất chuẩn kích thước thẻ CR80 ra máy in ảo Microsoft Print to PDF.");
+            SaveSnapshot(form, Path.Combine(imagesDir, "21_testcase8_in_ra_microsoft_print_to_pdf.png"));
 
             form.Close();
         }

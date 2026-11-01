@@ -3,60 +3,85 @@ using System.Drawing;
 namespace StudentCardPrinter.Models
 {
     /// <summary>
-    /// Định nghĩa cấu hình màu sắc và phong cách giao diện của thẻ sinh viên.
-    /// Giúp người dùng tùy biến giao diện thẻ sinh động, độc đáo (tính năng mở rộng).
+    /// Lớp cấu hình màu sắc và phong cách của Thẻ Sinh Viên (Design Pattern: Strategy/Theme).
+    /// Giúp người dùng tùy biến giao diện thẻ sinh động, độc đáo mà không làm xáo trộn bố cục vẽ.
     /// </summary>
     public class CardTheme
     {
-        public string Name { get; set; } = "HCMUE Chuẩn Xanh Navy";
-        public Color HeaderBgColor { get; set; } = Color.FromArgb(16, 44, 87);      // Xanh Navy đậm truyền thống HCMUE
-        public Color HeaderTextColor { get; set; } = Color.White;
-        public Color CardBgColor { get; set; } = Color.FromArgb(247, 250, 255);       // Nền thẻ dịu mắt
-        public Color BorderColor { get; set; } = Color.FromArgb(16, 44, 87);
-        public Color TextPrimaryColor { get; set; } = Color.FromArgb(16, 44, 87);
-        public Color TextLabelColor { get; set; } = Color.FromArgb(70, 80, 95);
-        public Color TextValueColor { get; set; } = Color.Black;
-        public Color FooterBgColor { get; set; } = Color.FromArgb(232, 238, 248);
+        public string Name { get; set; } = "Mặc định";
+        public Color HeaderBgColor { get; set; }
+        public Color HeaderTextColor { get; set; }
+        public Color AccentColor { get; set; }
+        public Color CardBgColor { get; set; }
+        public Color BorderColor { get; set; }
+        public Color TextPrimaryColor { get; set; }
+        public Color TextLabelColor { get; set; }
+        public Color TextValueColor { get; set; }
+        public Color FooterBgColor { get; set; }
         public bool ShowQrCode { get; set; } = true;
         public bool ShowSmartChip { get; set; } = true;
 
-        public static CardTheme[] PredefinedThemes => new[]
+        public static readonly CardTheme[] PredefinedThemes = new[]
         {
             new CardTheme
             {
-                Name = "HCMUE Chuẩn Xanh Navy",
-                HeaderBgColor = Color.FromArgb(16, 44, 87),
-                BorderColor = Color.FromArgb(16, 44, 87),
-                CardBgColor = Color.FromArgb(247, 250, 255),
+                Name = "HCMUE Classic (Xanh Dương Sư Phạm)",
+                HeaderBgColor = Color.FromArgb(20, 50, 105),       // Xanh Navy đại học
+                HeaderTextColor = Color.White,
+                AccentColor = Color.FromArgb(255, 215, 0),         // Vàng ánh kim
+                CardBgColor = Color.FromArgb(248, 250, 254),       // Trắng xanh thanh nhã
+                BorderColor = Color.FromArgb(20, 50, 105),
+                TextPrimaryColor = Color.FromArgb(20, 50, 105),
+                TextLabelColor = Color.FromArgb(85, 95, 110),
+                TextValueColor = Color.FromArgb(25, 30, 40),
                 FooterBgColor = Color.FromArgb(232, 238, 248),
-                TextPrimaryColor = Color.FromArgb(16, 44, 87)
+                ShowQrCode = true,
+                ShowSmartChip = true
             },
             new CardTheme
             {
-                Name = "Xanh Ngọc Năng Động (Emerald)",
-                HeaderBgColor = Color.FromArgb(10, 84, 56),
-                BorderColor = Color.FromArgb(10, 84, 56),
-                CardBgColor = Color.FromArgb(244, 252, 247),
-                FooterBgColor = Color.FromArgb(228, 245, 234),
-                TextPrimaryColor = Color.FromArgb(10, 84, 56)
+                Name = "Emerald Tech (Xanh Ngọc Công Nghệ)",
+                HeaderBgColor = Color.FromArgb(15, 80, 60),        // Xanh ngọc lục bảo
+                HeaderTextColor = Color.White,
+                AccentColor = Color.FromArgb(110, 230, 180),       // Xanh mint sáng
+                CardBgColor = Color.FromArgb(246, 253, 250),
+                BorderColor = Color.FromArgb(15, 80, 60),
+                TextPrimaryColor = Color.FromArgb(15, 80, 60),
+                TextLabelColor = Color.FromArgb(80, 100, 90),
+                TextValueColor = Color.FromArgb(20, 35, 30),
+                FooterBgColor = Color.FromArgb(228, 246, 238),
+                ShowQrCode = true,
+                ShowSmartChip = true
             },
             new CardTheme
             {
-                Name = "Đỏ Rượu Sang Trọng (Burgundy)",
-                HeaderBgColor = Color.FromArgb(128, 24, 40),
-                BorderColor = Color.FromArgb(128, 24, 40),
-                CardBgColor = Color.FromArgb(254, 246, 247),
-                FooterBgColor = Color.FromArgb(249, 230, 233),
-                TextPrimaryColor = Color.FromArgb(128, 24, 40)
+                Name = "Ruby Graduate (Đỏ Đô Sang Trọng)",
+                HeaderBgColor = Color.FromArgb(130, 25, 35),       // Đỏ ruby truyền thống
+                HeaderTextColor = Color.White,
+                AccentColor = Color.FromArgb(255, 210, 120),       // Vàng kem
+                CardBgColor = Color.FromArgb(255, 250, 250),
+                BorderColor = Color.FromArgb(130, 25, 35),
+                TextPrimaryColor = Color.FromArgb(130, 25, 35),
+                TextLabelColor = Color.FromArgb(110, 80, 85),
+                TextValueColor = Color.FromArgb(35, 20, 25),
+                FooterBgColor = Color.FromArgb(252, 235, 238),
+                ShowQrCode = true,
+                ShowSmartChip = true
             },
             new CardTheme
             {
-                Name = "Vàng Cam Nhiệt Huyết (Amber)",
-                HeaderBgColor = Color.FromArgb(190, 85, 10),
-                BorderColor = Color.FromArgb(190, 85, 10),
-                CardBgColor = Color.FromArgb(255, 250, 242),
-                FooterBgColor = Color.FromArgb(254, 240, 222),
-                TextPrimaryColor = Color.FromArgb(190, 85, 10)
+                Name = "Modern Slate (Xám Titan Tối Giản)",
+                HeaderBgColor = Color.FromArgb(45, 55, 72),        // Xám slate hiện đại
+                HeaderTextColor = Color.White,
+                AccentColor = Color.FromArgb(144, 205, 244),       // Xanh cyan nhạt
+                CardBgColor = Color.FromArgb(250, 250, 252),
+                BorderColor = Color.FromArgb(45, 55, 72),
+                TextPrimaryColor = Color.FromArgb(45, 55, 72),
+                TextLabelColor = Color.FromArgb(90, 100, 115),
+                TextValueColor = Color.FromArgb(20, 25, 35),
+                FooterBgColor = Color.FromArgb(235, 238, 242),
+                ShowQrCode = true,
+                ShowSmartChip = true
             }
         };
     }
